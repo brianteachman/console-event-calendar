@@ -1,29 +1,35 @@
-# README #
+# CS 140: Computer Programming Fundamentals I #
 
-This README would normally document whatever steps are necessary to get your application up and running.
-
-### What is this repository for? ###
-
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+This is code is product of my efforts in CS 140, Computer Programming Fundamentals I class in the Fall of 2017.
 
 ### How do I get set up? ###
 
 * Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
+    
+    Java 8 is run through a docker image.
+
+    * [Official](https://github.com/dockerfile/java/tree/master/oracle-java8)
+    * [cogniteev/oracle-java](https://store.docker.com/community/images/cogniteev/oracle-java)
+
+* Install instructions
+
+    Official image:
+
+        $ docker pull store/oracle/serverjre:8
+
+    cogniteev/oracle-java:
+
+        $ docker pull cogniteev/oracle-java
+
 * Deployment instructions
 
-### Contribution guidelines ###
+        $ docker run -it --rm cogniteev/oracle-java
 
-* Writing tests
-* Code review
-* Other guidelines
+    Run java
 
-### Who do I talk to? ###
+        $ docker run -it --rm cogniteev/oracle-java java
 
-* Repo owner or admin
-* Other community or team contact
+    Run javac
+
+        $ docker run -it --rm cogniteev/oracle-java javac
+
