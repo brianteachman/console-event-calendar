@@ -1,10 +1,10 @@
-
 #
 # Oracle Java 8 Dockerfile
-#
-# https://github.com/cogniteev/docker-oracle-java
+
 # https://github.com/cogniteev/docker-oracle-java/tree/master/oracle-java8
-#
+# https://docs.docker.com/engine/reference/builder/
+# https://docs.docker.com/engine/admin/volumes/volumes/
+# https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices
 
 # Pull base image.
 FROM ubuntu:16.04
@@ -28,4 +28,4 @@ WORKDIR /data
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 
 # Define default command.
-CMD ["bash"]
+#CMD ["bash"]
