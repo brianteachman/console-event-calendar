@@ -1,3 +1,5 @@
+package clsnotes;
+
 /*
    Brian Teachman
    CS 140
