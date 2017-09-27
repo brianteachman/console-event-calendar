@@ -1,5 +1,3 @@
-package clsnotes;
-
 public class Figures1 {
     public static void main(String[] args) {
         egg();

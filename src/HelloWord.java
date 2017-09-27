@@ -1,5 +1,3 @@
-package clsnotes;
-
 /*
    Brian Teachman
    CS140
@@ -10,7 +8,7 @@ package clsnotes;
    First Java file!
 */
 // class name must match file name if the class is to be public
- class HelloWord {
+public class HelloWord {
    /*
       Main function runs here
    */
@@ -25,6 +23,7 @@ package clsnotes;
       System.out.println();
       System.out.println("Brian");
    }
+
    
    public static void hello() {
    }

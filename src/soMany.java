@@ -1,4 +1,3 @@
-package clsnotes;
 
 /*
    Brian Teachman
