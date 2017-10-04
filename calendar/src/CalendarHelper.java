@@ -6,7 +6,7 @@
 
     Prints a text formatted calendar to the console.
 */
-public class Calendar {
+public class CalendarHelper {
 
     public static final int WIDTH = 10;
 
