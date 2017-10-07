@@ -18,9 +18,10 @@ public class App {
         month = cal.get(Calendar.MONTH); // indexed month (Jan == 0)
         day = cal.get(Calendar.DAY_OF_MONTH);
 
-        System.out.println(Calendar.DAY_OF_MONTH);
-        System.out.println(Calendar.THURSDAY);
-        System.out.println(Calendar.DATE);
+        System.out.print("It's the ");
+        System.out.println(day);
+
+        System.out.println(cal.getFirstDayOfWeek());
 
         printMonth(5);
     }

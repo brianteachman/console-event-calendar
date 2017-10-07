@@ -22,26 +22,29 @@ public class ChangeCalculator {
     }
     public static void main(String[] args){
         double amount = getInput();
-        double change;
-
-        System.out.println("Your change is:");
-        change = makeChange(amount, 100);
-        change = makeChange(change, 50);
-        change = makeChange(change, 20);
-        change = makeChange(change, 10);
-        change = makeChange(change, 5);
-        change = makeChange(change, 1);
-        change = makeChange(change, 0.25);
-        change = makeChange(change, 0.10);
-        change = makeChange(change, 0.05);
-        change = makeChange(change, 0.01);
+        makeChange(amount); // returns correct denominations
 
         //Example calls
 //        System.out.println("100s: "+ 5/* expression to calculate number of 10$ bills*/);
 //        amount = 0;/* expression to calculate money left to give change for. */
     }
 
-    public static double makeChange(double payment, double denom) {
+    public static void makeChange(double amount) {
+        System.out.println("Your change is:");
+        double change;
+        change = printDenom(amount, 100);
+        change = printDenom(change, 50);
+        change = printDenom(change, 20);
+        change = printDenom(change, 10);
+        change = printDenom(change, 5);
+        change = printDenom(change, 1);
+        change = printDenom(change, 0.25);
+        change = printDenom(change, 0.10);
+        change = printDenom(change, 0.05); // TODO: still has rounding error
+        printDenom(change, 0.01);
+    }
+
+    public static double printDenom(double payment, double denom) {
         int num = (int) (payment / denom); // Denomination quantity
         double change = payment % denom;   // Remainder after denomination multiple returned
 
