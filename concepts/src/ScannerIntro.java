@@ -4,8 +4,8 @@ import java.util.Scanner;
  * Brian Teachman
  * CS 140: Whatcom Community College
  * 10/6/2017
- * <p>
- * concepts: PACKAGE_NAME
+ *
+ * Concepts: Scanner object
  */
 public class ScannerIntro {
     /*

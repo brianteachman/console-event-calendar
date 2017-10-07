@@ -9,6 +9,7 @@ public class App {
 
     static int month;
     static int day;
+    static int weekday;
 
     public static void main(String[] args) {
         System.out.println("Your calandar, sir.");
@@ -17,13 +18,15 @@ public class App {
         Calendar cal = Calendar.getInstance();
         month = cal.get(Calendar.MONTH); // indexed month (Jan == 0)
         day = cal.get(Calendar.DAY_OF_MONTH);
+        weekday = cal.get(Calendar.DAY_OF_WEEK);
 
         System.out.print("It's the ");
+        System.out.println(weekday + "th day of the week.");
         System.out.println(day);
 
-        System.out.println(cal.getFirstDayOfWeek());
+        System.out.println( cal.getFirstDayOfWeek() );
 
-        printMonth(5);
+//        printMonth(5);
     }
 
     public static void rowHeader(int width) {
@@ -44,14 +47,17 @@ public class App {
             for (int j = 0; j < 7; j++) {
                 for (int k = 0; k < width; k++) {
                     if (k == 1) {
+
                         // calendar day of the month goes here
                         System.out.print('x');
                     }
                     else if (k == (width-1) ) {
+
                         // end of cell
                         System.out.print("|");
                     }
                     else {
+
                         // pad cell
                         System.out.print(' ');
                     }
