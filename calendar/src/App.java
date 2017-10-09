@@ -17,7 +17,7 @@ public class App {
         System.out.println("Your calandar, sir.");
 
         // get todays date
-        getTodaysDate();
+//        getTodaysDate();
 
         printMonth(5);
     }
@@ -37,13 +37,13 @@ public class App {
     public static String promptForDate() {
         System.out.print("What date would you like like to look at? (mm/dd): ");
         Scanner input = new Scanner(System.in);
-        String inputData = input.nextLine();
-        validateInput(inputData);
+        String inputData = input.nextLine(); // in-line processing
+        setInputDate(inputData);
         return inputData;
     }
 
     /**
-     * Validate users input
+     * Validates and sets users input
      *
      * Check that month (mm) is between 1 and 12, day (dd) is between 1 and 31,
      * and that they are formatted correctly (mm/dd).
@@ -51,7 +51,7 @@ public class App {
      * @param inputData String
      * @throws IllegalArgumentException
      */
-    public static void validateInput(String inputData) {
+    public static void setInputDate(String inputData) {
         int delimiterIndex = inputData.indexOf('/');
         if ( !(delimiterIndex == 1 || delimiterIndex == 2)) { // accounts for '1' or '01' format
             throw new IllegalArgumentException("Expected the format 'mm/dd', where mm is the month and dd is the day.");
@@ -59,10 +59,10 @@ public class App {
 
         // if month starts with a zero, remove it
         String mm = inputData.substring(0, delimiterIndex);
-        checkDateSegment(mm, 12, "Months");
+        month = checkDateSegment(mm, 12, "Months"); //TODO set month
 
         String dd = inputData.substring(delimiterIndex+1);
-        checkDateSegment(dd, 31, "Days");
+        day = checkDateSegment(dd, 31, "Days"); //TODO set day
     }
 
     /**
@@ -72,13 +72,14 @@ public class App {
      * @param upperBound
      * @param segmentName
      */
-    public static void checkDateSegment(String segment, int upperBound, String segmentName) {
+    public static int checkDateSegment(String segment, int upperBound, String segmentName) {
         segment = removeLeadingZero(segment);
         ArrayList<String> validSegments = getValidList(upperBound);
         if ( ! validSegments.contains(segment)) { // check input is in valid month range
             throw new IllegalArgumentException(String.format("%s range from 1 to %d. %s given.",
                     segmentName, upperBound, segment));
         }
+        return Integer.parseInt(segment);
     }
 
     /**
