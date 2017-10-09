@@ -1,21 +1,21 @@
 // This program computes the trajectory of a projectile.
 // Second, structured version.
 
+import java.awt.geom.Point2D;
 import java.text.DecimalFormat;
 import java.util.Scanner;
-import java.awt.Point;
 
 public class ProjectileTable {
+
     // constant for Earth acceleration in meters/second^2
     public static final double ACCELERATION = -9.81;
-
-    public static double x = 0.0;
-    public static double y = 0.0;
-    public static double t = 0.0;
 
     public static double velocity;
     public static double angle;
     public static int steps;
+
+    public static Point2D.Double pos = new Point2D.Double(0.0, 0.0);
+    public static double t = 0.0;
 
     public static void main(String[] args) {
         giveIntro();
@@ -56,8 +56,8 @@ public class ProjectileTable {
         double deltaX = xVelocity * deltaT;
 
         t += deltaT;
-        x += deltaX;
-        y = displacement(yVelocity, t, ACCELERATION);
+        pos.x += deltaX;
+        pos.y = displacement(yVelocity, t, ACCELERATION);
     }
 
     // returns the horizontal displacement for a body given
@@ -77,8 +77,8 @@ public class ProjectileTable {
         DecimalFormat formatter = new DecimalFormat("00.00");
         System.out.printf(format,
                 step_number,
-                formatter.format(round2(x)),
-                formatter.format(round2(y)),
+                formatter.format(round2(pos.x)),
+                formatter.format(round2(pos.y)),
                 formatter.format(round2(t)));
     }
 
