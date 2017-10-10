@@ -19,6 +19,8 @@ public class App {
         // get todays date
 //        getTodaysDate();
 
+        System.out.println(String.format("You wanted to see month %d and day %d?", month, day));
+
         printMonth(5);
     }
 
@@ -59,10 +61,10 @@ public class App {
 
         // if month starts with a zero, remove it
         String mm = inputData.substring(0, delimiterIndex);
-        month = checkDateSegment(mm, 12, "Months"); //TODO set month
+        month = validateAndReturnInt(mm, 12, "Months"); //TODO set month
 
         String dd = inputData.substring(delimiterIndex+1);
-        day = checkDateSegment(dd, 31, "Days"); //TODO set day
+        day = validateAndReturnInt(dd, 31, "Days"); //TODO set day
     }
 
     /**
@@ -72,7 +74,7 @@ public class App {
      * @param upperBound
      * @param segmentName
      */
-    public static int checkDateSegment(String segment, int upperBound, String segmentName) {
+    public static int validateAndReturnInt(String segment, int upperBound, String segmentName) {
         segment = removeLeadingZero(segment);
         ArrayList<String> validSegments = getValidList(upperBound);
         if ( ! validSegments.contains(segment)) { // check input is in valid month range
