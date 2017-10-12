@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /*
@@ -9,16 +10,18 @@ import java.util.Calendar;
 */
 public class CalendarHelper {
 
+    Calendar cal = Calendar.getInstance();
+
     public void getTodaysDate() {
 //        Calendar cal = Calendar.getInstance();
-//        month = cal.get(Calendar.MONTH); // indexed month (Jan == 0)
-//        day = cal.get(Calendar.DAY_OF_MONTH);
-//        weekday = cal.get(Calendar.DAY_OF_WEEK);
+//        int monthIndex = cal.get(Calendar.MONTH); // indexed month (Jan == 0)
+//        int day = cal.get(Calendar.DAY_OF_MONTH);
+//        int weekday = cal.get(Calendar.DAY_OF_WEEK);
+//        System.out.printf("%d/%s/%s", monthIndex+1, day, "2017");
 
         // https://stackoverflow.com/a/2938209/503781
 
         // get today and clear time of day
-        Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0); // ! clear would not reset the hour of day !
         cal.clear(Calendar.MINUTE);
         cal.clear(Calendar.SECOND);
@@ -35,27 +38,34 @@ public class CalendarHelper {
         System.out.println("... in milliseconds:      " + cal.getTimeInMillis());
     }
 
-    /*
-    * Accepts an integer representing the month and displays
-    * the month as a text formatted calendar
-    *
-    * @param int month
-    * @return void
-    * @exit Prints month to stream
-    */
-    public void drawMonth(int month) {
-        // uses drawRow()
+    public void printFormattedToday() {
+        System.out.printf("%d/%s/%s", cal.get(Calendar.MONTH)+1, cal.get(Calendar.DAY_OF_MONTH), "2017");
     }
 
     /*
-    * Displays one week on the calendar (one row).
+    * Given a date as a String, extract an integer value for the month and return it.
     *
-    * @param int row  Integer representing which row to display
-    * @return void
-    * @exit Prints one week (1-4) of the month to stream
+    * @param String
+    * @return int
     */
-    public void drawRow(int row) {
+    public int monthFromDate(String formatedDate, int delimiterIndex) {
+//        String mm = formatedDate.substring(0, formatedDate.indexOf('/'));
+        String mm = formatedDate.substring(0, delimiterIndex);
+        return validateAndReturnInt(mm, 12, "Months");
+    }
 
+    /*
+    * Given a date as a String, extract an integer value for the day and return it.
+    *
+    * @param String
+    * @return int
+    */
+    public int dayFromDate(String formatedDate, int delimiterIndex) {
+//        String dd = formatedDate.substring(formatedDate.indexOf('/')+1);
+        // Since I already have a call to indexOf stored in the parent scope, perhaps
+        // its faster to just pass it index in, instead of call .indexOf again?
+        String dd = formatedDate.substring(delimiterIndex+1);
+        return validateAndReturnInt(dd, 31, "Days");
     }
 
     /*
@@ -68,19 +78,47 @@ public class CalendarHelper {
 
     }
 
-    /*
-    * Given a date as a String, extract an integer value for the month and return it.
-    *
-    * the indexOf and substring methods may be helpful with this
-    */
-    public void monthFromDate(String date) {
-
+    /**
+     * Check date segments for valid, correctly formatted input
+     *
+     * @param dateSegment
+     * @param upperBound
+     * @param segmentName
+     */
+    public int validateAndReturnInt(String dateSegment, int upperBound, String segmentName) {
+        dateSegment = removeLeadingZero(dateSegment);
+        ArrayList<String> validSegments = getValidList(upperBound);
+        if ( ! validSegments.contains(dateSegment)) { // check input is in valid month range
+            throw new IllegalArgumentException(String.format("%s range from 1 to %d. %s given.",
+                    segmentName, upperBound, dateSegment));
+        }
+        return Integer.parseInt(dateSegment);
     }
 
-    /*
-    * Given a date as a String, extract an integer value for the day and return it.
-    */
-    public void dayFromDate(String date) {
-        // the indexOf and substring methods may be helpful with this
+    /**
+     * Build a list of ascii integers representing  (for easy range checking)
+     *
+     * @param upperBound int
+     * @return ArrayList<String>
+     */
+    public static ArrayList<String> getValidList(int upperBound) {
+        ArrayList<String> list = new ArrayList<String>();
+        for (int i=1; i<=upperBound; i++) {
+            list.add("".valueOf(i));
+        }
+        return list;
+    }
+
+    /**
+     * If string segment starts with a zero, remove it
+     *
+     * @param dateSegment
+     * @return String
+     */
+    public static String removeLeadingZero(String dateSegment) {
+        if (dateSegment.startsWith("0")) {
+            dateSegment = dateSegment.substring(1);
+        }
+        return dateSegment;
     }
 }
