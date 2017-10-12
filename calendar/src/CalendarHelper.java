@@ -1,3 +1,4 @@
+import java.util.Calendar;
 
 /*
     Brian Teachman
@@ -8,7 +9,31 @@
 */
 public class CalendarHelper {
 
-    public static final int WIDTH = 10;
+    public void getTodaysDate() {
+//        Calendar cal = Calendar.getInstance();
+//        month = cal.get(Calendar.MONTH); // indexed month (Jan == 0)
+//        day = cal.get(Calendar.DAY_OF_MONTH);
+//        weekday = cal.get(Calendar.DAY_OF_WEEK);
+
+        // https://stackoverflow.com/a/2938209/503781
+
+        // get today and clear time of day
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0); // ! clear would not reset the hour of day !
+        cal.clear(Calendar.MINUTE);
+        cal.clear(Calendar.SECOND);
+        cal.clear(Calendar.MILLISECOND);
+
+        // get start of the month
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        System.out.println("Start of the month:       " + cal.getTime());
+        System.out.println("... in milliseconds:      " + cal.getTimeInMillis());
+
+        // get start of the next month
+        cal.add(Calendar.MONTH, 1);
+        System.out.println("Start of the next month:  " + cal.getTime());
+        System.out.println("... in milliseconds:      " + cal.getTimeInMillis());
+    }
 
     /*
     * Accepts an integer representing the month and displays
@@ -18,7 +43,7 @@ public class CalendarHelper {
     * @return void
     * @exit Prints month to stream
     */
-    public static void drawMonth(int month) {
+    public void drawMonth(int month) {
         // uses drawRow()
     }
 
@@ -29,7 +54,7 @@ public class CalendarHelper {
     * @return void
     * @exit Prints one week (1-4) of the month to stream
     */
-    public static void drawRow(int row) {
+    public void drawRow(int row) {
 
     }
 
@@ -39,7 +64,7 @@ public class CalendarHelper {
     * @param int month
     * @param int day
     */
-    public static void displayDate(int month, int day) {
+    public void displayDate(int month, int day) {
 
     }
 
@@ -48,14 +73,14 @@ public class CalendarHelper {
     *
     * the indexOf and substring methods may be helpful with this
     */
-    public static void monthFromDate(String date) {
+    public void monthFromDate(String date) {
 
     }
 
     /*
     * Given a date as a String, extract an integer value for the day and return it.
     */
-    public static void dayFromDate(String date) {
+    public void dayFromDate(String date) {
         // the indexOf and substring methods may be helpful with this
     }
 }

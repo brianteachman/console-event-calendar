@@ -1,3 +1,5 @@
+import com.sun.javaws.exceptions.InvalidArgumentException;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Scanner;
@@ -13,25 +15,13 @@ public class App {
     static int weekday;
 
     public static void main(String[] args) {
-        String date = promptForDate();
-        System.out.println("Your calandar, sir.");
+            String date = promptForDate();
+            System.out.println("Your calandar, sir.");
 
-        // get todays date
-//        getTodaysDate();
+            CalendarHelper cal = new CalendarHelper();
+            cal.getTodaysDate();
 
-        printMonth(5);
-    }
-
-    public static void getTodaysDate() {
-        Calendar cal = Calendar.getInstance();
-        month = cal.get(Calendar.MONTH); // indexed month (Jan == 0)
-        day = cal.get(Calendar.DAY_OF_MONTH);
-        weekday = cal.get(Calendar.DAY_OF_WEEK);
-
-        System.out.print("It's the ");
-        System.out.println(weekday + "th day of the week.");
-        System.out.println(day);
-        System.out.println( cal.getFirstDayOfWeek() );
+            printMonth(5);
     }
 
     public static String promptForDate() {
@@ -51,7 +41,7 @@ public class App {
      * @param inputData String
      * @throws IllegalArgumentException
      */
-    public static void setInputDate(String inputData) {
+    public static void setInputDate(String inputData){
         int delimiterIndex = inputData.indexOf('/');
         if ( !(delimiterIndex == 1 || delimiterIndex == 2)) { // accounts for '1' or '01' format
             throw new IllegalArgumentException("Expected the format 'mm/dd', where mm is the month and dd is the day.");
