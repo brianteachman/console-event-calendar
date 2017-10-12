@@ -1,24 +1,20 @@
-import java.util.ArrayList;
-import java.util.Calendar;
-
 /*
     Brian Teachman
     CS 140: Whatcom Community College
-    10/2/2017
+    10/11/2017
 
-    Prints a text formatted calendar to the console.
+    Java 8 Calendar Wrapper: console calendar helper class.
 */
+import java.util.ArrayList;
+import java.util.Calendar;
+
 public class CalendarHelper {
+
+    int[] monthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
     Calendar cal = Calendar.getInstance();
 
-    public void getTodaysDate() {
-//        Calendar cal = Calendar.getInstance();
-//        int monthIndex = cal.get(Calendar.MONTH); // indexed month (Jan == 0)
-//        int day = cal.get(Calendar.DAY_OF_MONTH);
-//        int weekday = cal.get(Calendar.DAY_OF_WEEK);
-//        System.out.printf("%d/%s/%s", monthIndex+1, day, "2017");
-
+    public void getStartDate(int month) {
         // https://stackoverflow.com/a/2938209/503781
 
         // get today and clear time of day
@@ -43,11 +39,11 @@ public class CalendarHelper {
     }
 
     /*
-    * Given a date as a String, extract an integer value for the month and return it.
-    *
-    * @param String
-    * @return int
-    */
+     * Given a date as a String, extract an integer value for the month and return it.
+     *
+     * @param String
+     * @return int
+     */
     public int monthFromDate(String formatedDate, int delimiterIndex) {
 //        String mm = formatedDate.substring(0, formatedDate.indexOf('/'));
         String mm = formatedDate.substring(0, delimiterIndex);
@@ -55,13 +51,12 @@ public class CalendarHelper {
     }
 
     /*
-    * Given a date as a String, extract an integer value for the day and return it.
-    *
-    * @param String
-    * @return int
-    */
+     * Given a date as a String, extract an integer value for the day and return it.
+     *
+     * @param String
+     * @return int
+     */
     public int dayFromDate(String formatedDate, int delimiterIndex) {
-//        String dd = formatedDate.substring(formatedDate.indexOf('/')+1);
         // Since I already have a call to indexOf stored in the parent scope, perhaps
         // its faster to just pass it index in, instead of call .indexOf again?
         String dd = formatedDate.substring(delimiterIndex+1);
@@ -69,11 +64,11 @@ public class CalendarHelper {
     }
 
     /*
-    * Display the date information as a graphical representation of the calendar.
-    *
-    * @param int month
-    * @param int day
-    */
+     * Display the date information as a graphical representation of the calendar.
+     *
+     * @param int month
+     * @param int day
+     */
     public void displayDate(int month, int day) {
 
     }
@@ -96,7 +91,7 @@ public class CalendarHelper {
     }
 
     /**
-     * Build a list of ascii integers representing  (for easy range checking)
+     * Build a list of ascii integers representing months and days (for easy range checking)
      *
      * @param upperBound int
      * @return ArrayList<String>
