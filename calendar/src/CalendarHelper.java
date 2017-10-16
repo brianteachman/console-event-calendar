@@ -5,12 +5,14 @@
 
     Java 8 Calendar Wrapper: console calendar helper class.
 */
+import com.sun.javaws.exceptions.InvalidArgumentException;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CalendarHelper {
 
-    int[] monthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    private int[] monthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
     private Calendar cal;
 
@@ -74,7 +76,7 @@ public class CalendarHelper {
      * @param String
      * @return int
      */
-    public int monthFromDate(String formatedDate, int delimiterIndex) {
+    public int monthFromDate(String formatedDate, int delimiterIndex) throws InvalidArgumentException {
 //        String mm = formatedDate.substring(0, formatedDate.indexOf('/'));
         String mm = formatedDate.substring(0, delimiterIndex);
         return validateAndReturnInt(mm, 12, "Months");
@@ -86,7 +88,7 @@ public class CalendarHelper {
      * @param String
      * @return int
      */
-    public int dayFromDate(String formatedDate, int delimiterIndex) {
+    public int dayFromDate(String formatedDate, int delimiterIndex) throws InvalidArgumentException {
         // Since I already have a call to indexOf stored in the parent scope, perhaps
         // its faster to just pass it index in, instead of call .indexOf again?
         String dd = formatedDate.substring(delimiterIndex+1);
@@ -100,7 +102,8 @@ public class CalendarHelper {
      * @param upperBound
      * @param segmentName
      */
-    public int validateAndReturnInt(String dateSegment, int upperBound, String segmentName) {
+    public int validateAndReturnInt(String dateSegment, int upperBound, String segmentName)
+            throws InvalidArgumentException {
         dateSegment = removeLeadingZero(dateSegment);
         ArrayList<String> validSegments = getValidList(upperBound);
         if ( ! validSegments.contains(dateSegment)) { // check input is in valid month range
