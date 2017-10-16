@@ -1,9 +1,17 @@
+/**
+ * A console calendar
+ *
+ * Displays a given month
+ */
+
 import com.sun.javaws.exceptions.InvalidArgumentException;
+
+import java.text.DecimalFormat;
 import java.util.Scanner;
 
 // https://docs.oracle.com/javase/8/docs/api/java/util/Calendar.html
 
-public class App {
+public class Application {
 
     final static int CELL_WIDTH = 5;
 
@@ -16,15 +24,15 @@ public class App {
         asciiArt();
 
         String date = promptForDate();
-//        System.out.println("Your calandar for "+date+", sir.");
-//        cal.printFormattedToday();
+        System.out.println("Your calandar for "+month+"/"+day+", sir.");
+        System.out.println("Start of the month: " + cal.getDayMonthStartsOn());
+        System.out.println("End of the month: " + cal.getLastDayofMonth() + "\n");
+        System.out.println();
 
-        cal.getStartDate(month);
+//        drawMonth(month);
 
-        drawMonth(month);
-
-//        System.out.println("Month: ");
-//        System.out.println("Day: ");
+        System.out.println("Month: " + month);
+        System.out.println("Day: " + day);
     }
 
     public static void asciiArt() {}
@@ -33,12 +41,11 @@ public class App {
         System.out.print("What date would you like like to look at? (mm/dd): ");
         Scanner input = new Scanner(System.in); // user prompt
         String inputData = input.nextLine(); // in-line processing
-//        setDate(inputData);
         try { // try to fail gracefully
             setDate(inputData);
         }
         catch (InvalidArgumentException e) {
-            System.out.println(e.getRealMessage());
+            System.out.println(e.toString());
             promptForDate(); //TODO recursively reprompt? Why doesn't it work
         }
         return inputData;
@@ -61,6 +68,7 @@ public class App {
         // Is it more efficient to just pass the index in?
         month = cal.monthFromDate(inputData, delimiterIndex);
         day = cal.dayFromDate(inputData, delimiterIndex);
+        cal.setCalendarDate(month, day);
     }
 
     /*
@@ -68,8 +76,6 @@ public class App {
      * the month as a text formatted calendar
      *
      * @param int month
-     * @return void
-     * @exit Prints month to stream
      */
     static public void drawMonth(int month) {
         rowHeader(CELL_WIDTH);
@@ -81,6 +87,11 @@ public class App {
         }
     }
 
+    /**
+     * Print a row divider, some given width
+     *
+     * @param width
+     */
     public static void rowHeader(int width) {
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < width; j++) {
@@ -98,13 +109,14 @@ public class App {
      * @exit Prints one week (1-4) of the month to stream
      */
     public static void drawRow(int row) {
-        for (int i = 0; i < cellHeight(); i++) { // cell height number of rows
+        for (int rowHeight = 0; rowHeight < cellHeight(); rowHeight++) { // cell height number of rows
             System.out.print("|"); // start row
-            for (int j = 0; j < 7; j++) { // 7 cells for 7 days
+            for (int cellNumber = 0; cellNumber < 7; cellNumber++) { // 7 cells for 7 days
                 for (int k = 0; k < CELL_WIDTH; k++) { // cell content
-                    if (k == 1 && i == 0) { // after one blank space on the first row
+                    if (k == 1 && rowHeight == 0) { // after one blank space on the first row
 
-                        printCalendarDay();
+                        printCalendarDay(row, cellNumber);
+                        k++; // account for double digit format
 
                     } else if (k == (CELL_WIDTH - 1)) {
                         System.out.print("|"); // end of cell
@@ -132,9 +144,35 @@ public class App {
         return rowHieght;
     }
 
-    public static void printCalendarDay() {
+    static int dayCount = 0;
 
-        //TODO calendar day of the month goes here
-        System.out.print('x');
+    public static void printCalendarDay(int rowNumber, int cellNumber) {
+
+        int startCell = cal.getDayMonthStartsOn(); //TODO: fix this, wrong output
+        int end = cal.getLastDayofMonth();
+
+        if (rowNumber == 0 && cellNumber < (startCell - 1)) {
+            System.out.print("  ");
+        }
+        else if (dayCount <= end) {
+//            if (dayCount < 10) { // pad w/space to match spacing for double digits
+//                System.out.print(' ');
+//            }
+//            System.out.print(++dayCount);
+            System.out.print(new DecimalFormat("00").format(++dayCount));
+        }
+        else {
+            System.out.print("  ");
+        }
+    }
+
+    /*
+     * Display the date information as a graphical representation of the calendar.
+     *
+     * @param int month
+     * @param int day
+     */
+    public void displayDate(int month, int day) {
+
     }
 }
