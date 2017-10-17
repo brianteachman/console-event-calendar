@@ -31,17 +31,10 @@ public class CalendarHelper {
         this.cal.clear(Calendar.SECOND);       // reset seconds
         this.cal.clear(Calendar.MILLISECOND);  // reset millis
 
-        // then set the day and month
+        // then set the day and get the month
         this.cal.set(Calendar.DAY_OF_MONTH, day);
         int thisMonth = this.cal.get(Calendar.MONTH);
-        // convert to index from the calendar month
-        int delta = (month - 1) - thisMonth;
-        if (thisMonth > month) {
-            this.cal.add(Calendar.MONTH, delta);
-        }
-        else if (thisMonth < month) {
-            this.cal.add(Calendar.MONTH, delta);
-        }
+        this.cal.add(Calendar.MONTH, (month-1) - thisMonth);
     }
 
     /**
@@ -64,7 +57,7 @@ public class CalendarHelper {
         return this.cal.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
 
-    public void printFormattedToday(boolean isInline) {
+    public void printFormattedToday() {
         System.out.printf("%d/%s/%s",
                 this.cal.get(Calendar.MONTH)+1,
                 this.cal.get(Calendar.DAY_OF_MONTH), "2017");
@@ -101,6 +94,7 @@ public class CalendarHelper {
      * @param dateSegment
      * @param upperBound
      * @param segmentName
+     * @return int
      */
     public int validateAndReturnInt(String dateSegment, int upperBound, String segmentName)
             throws InvalidArgumentException {

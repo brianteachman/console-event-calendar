@@ -24,15 +24,15 @@ public class Application {
         asciiArt();
 
         String date = promptForDate();
-        System.out.println("Your calandar for "+month+"/"+day+", sir.");
-        System.out.println("Start of the month: " + cal.getDayMonthStartsOn());
-        System.out.println("End of the month: " + cal.getLastDayofMonth() + "\n");
-        System.out.println();
+        System.out.println("Your calandar for "+month+"/"+day+", sir.\n");
 
-//        drawMonth(month);
+        drawMonth(month);
 
         System.out.println("Month: " + month);
-        System.out.println("Day: " + day);
+        System.out.println("Day:   " + day);
+        System.out.println();
+        System.out.println("Start of the month: " + cal.getDayMonthStartsOn());
+        System.out.println("End of the month:   " + cal.getLastDayofMonth());
     }
 
     public static void asciiArt() {}
@@ -62,7 +62,7 @@ public class Application {
      */
     public static void setDate(String inputData) throws InvalidArgumentException {
         int delimiterIndex = inputData.indexOf('/');
-        if ( !(delimiterIndex == 1 || delimiterIndex == 2)) { // accounts for '1' or '01' formatted case
+        if ( ! (delimiterIndex == 1 || delimiterIndex == 2)) { // accounts for '1' or '01' formatted case
             throw new IllegalArgumentException("Expected the format 'mm/dd', where mm is the month and dd is the day.");
         }
         // Is it more efficient to just pass the index in?

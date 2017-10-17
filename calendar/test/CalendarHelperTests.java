@@ -14,9 +14,12 @@ class CalendarHelperTests {
 
     CalendarHelper cal = new CalendarHelper();
 
-    @Test
-    void testCalendarHelperCanGetDate() {
-        assertEquals(2, 1 + 1);
+//    @Test
+    void testValidateAndReturnIntBoundaries() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            cal.validateAndReturnInt("13", 35, "days");
+//            throw new IllegalArgumentException("oops");
+        });
     }
 
     @Test
@@ -28,13 +31,6 @@ class CalendarHelperTests {
         cal.setCalendarDate(2, 1); // February 1st
         assertEquals(4, cal.getDayMonthStartsOn());
         assertEquals(28, cal.getLastDayofMonth());
-    }
-
-//    @Test
-    void testValidateAndReturnIntBoundaries() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            cal.validateAndReturnInt("13", 35, "days");
-        });
     }
 
     @Test
