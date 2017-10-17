@@ -35,7 +35,22 @@ public class Application {
         System.out.println("End of the month:   " + cal.getLastDayofMonth());
     }
 
-    public static void asciiArt() {}
+    public static void asciiArt() {
+        int rows = 10;
+        int cols = 20;
+
+        for (int i=0; i < rows; i++) {
+//            for (int j=0; j < cols; j++) {
+//                if (j % 5 == 0) print("/");
+//                if (j == 19) print("\n");
+//                if (i % 3 == 0 || j < 10) {
+//                    print("/");
+//                }
+//            }
+//            print("-");
+        }
+        print("\n\n");
+    }
 
     public static String promptForDate() {
         System.out.print("What date would you like like to look at? (mm/dd): ");
@@ -175,5 +190,9 @@ public class Application {
      */
     public void displayDate(int month, int day) {
 //        TODO: what exactly does this do?
+    }
+
+    public static void print(String thing) {
+        System.out.print(thing);
     }
 }

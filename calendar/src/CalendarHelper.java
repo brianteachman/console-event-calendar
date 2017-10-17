@@ -70,7 +70,6 @@ public class CalendarHelper {
      * @return int
      */
     public int monthFromDate(String formatedDate, int delimiterIndex) throws InvalidArgumentException {
-//        String mm = formatedDate.substring(0, formatedDate.indexOf('/'));
         String mm = formatedDate.substring(0, delimiterIndex);
         return validateAndReturnInt(mm, 12, "Months");
     }
