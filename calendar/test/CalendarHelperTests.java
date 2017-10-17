@@ -25,11 +25,11 @@ class CalendarHelperTests {
     @Test
     void testFirstAndLastDayOfEachMonthIn2017() {
         cal.setCalendarDate(1, 1); // January 1st
-        assertEquals(1, cal.getDayMonthStartsOn());
+        assertEquals(1, cal.getDayMonthStartsOn()); // Sunday = 1
         assertEquals(31, cal.getLastDayofMonth());
 
         cal.setCalendarDate(2, 1); // February 1st
-        assertEquals(4, cal.getDayMonthStartsOn());
+        assertEquals(4, cal.getDayMonthStartsOn()); // Wednesday = 4
         assertEquals(28, cal.getLastDayofMonth());
     }
 

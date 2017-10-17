@@ -24,7 +24,7 @@ public class Application {
         asciiArt();
 
         String date = promptForDate();
-        System.out.println("Your calandar for "+month+"/"+day+", sir.\n");
+        System.out.println("Your calandar for "+month+"/"+day+":\n");
 
         drawMonth(month);
 
@@ -144,7 +144,7 @@ public class Application {
         return rowHieght;
     }
 
-    static int dayCount = 0;
+    private static int dayCount = 0;
 
     public static void printCalendarDay(int rowNumber, int cellNumber) {
 
@@ -160,6 +160,7 @@ public class Application {
 //            }
 //            System.out.print(++dayCount);
             System.out.print(new DecimalFormat("00").format(++dayCount));
+//            System.out.printf("%2d", ++dayCount);
         }
         else {
             System.out.print("  ");

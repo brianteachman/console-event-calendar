@@ -19,7 +19,7 @@ public class CalendarHelper {
     /**
      * Constructor
      */
-    public CalendarHelper() {
+    CalendarHelper() {
         this.cal = Calendar.getInstance();
     }
 
@@ -31,10 +31,10 @@ public class CalendarHelper {
         this.cal.clear(Calendar.SECOND);       // reset seconds
         this.cal.clear(Calendar.MILLISECOND);  // reset millis
 
-        // then set the day and get the month
-        this.cal.set(Calendar.DAY_OF_MONTH, day);
+        // then set the month and day
         int thisMonth = this.cal.get(Calendar.MONTH);
         this.cal.add(Calendar.MONTH, (month-1) - thisMonth);
+        this.cal.set(Calendar.DAY_OF_MONTH, day);
     }
 
     /**
