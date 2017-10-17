@@ -14,7 +14,7 @@ class CalendarHelperTests {
 
     CalendarHelper cal = new CalendarHelper();
 
-//    @Test
+    @Test
     void testValidateAndReturnIntBoundaries() {
         assertThrows(IllegalArgumentException.class, () -> {
             cal.validateAndReturnInt("13", 35, "days");
@@ -25,12 +25,10 @@ class CalendarHelperTests {
     @Test
     void testFirstAndLastDayOfEachMonthIn2017() {
         int[] monthStarts = {1, 4, 4, 7, 2, 5, 7, 3, 6, 1, 4, 6};
-        int[] totalDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-
-        for (int i=0; i < totalDays.length; i++) {
+        for (int i=0; i < cal.monthDays.length; i++) {
             cal.setCalendarDate(i+1, 1);
             assertEquals(monthStarts[i], cal.getDayMonthStartsOn());
-            assertEquals(totalDays[i], cal.getLastDayofMonth());
+            assertEquals( cal.monthDays[i], cal.getLastDayofMonth());
         }
     }
 

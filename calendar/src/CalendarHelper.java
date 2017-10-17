@@ -12,7 +12,7 @@ import java.util.Calendar;
 
 public class CalendarHelper {
 
-    private int[] monthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    public int[] monthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
     private Calendar cal;
 
