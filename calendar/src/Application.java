@@ -96,9 +96,7 @@ public class Application {
         rowHeader(CELL_WIDTH);
         for (int i = 0; i < 5; i++) { // 5 weeks
             drawRow(i);
-            if (i != 5) {
-                rowHeader(CELL_WIDTH);
-            }
+            rowHeader(CELL_WIDTH);
         }
     }
 
