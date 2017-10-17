@@ -14,7 +14,7 @@ class CalendarHelperTests {
 
     CalendarHelper cal = new CalendarHelper();
 
-//    @Test
+    @Test
     void testValidateAndReturnIntBoundaries() {
         assertThrows(IllegalArgumentException.class, () -> {
             cal.validateAndReturnInt("13", 35, "days");
