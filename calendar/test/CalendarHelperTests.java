@@ -1,3 +1,4 @@
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -43,6 +44,22 @@ class CalendarHelperTests {
         });
         assertThrows(IllegalArgumentException.class, () -> {
             cal.validateAndReturnInt("32", 31, "days");
+        });
+    }
+
+    @Test
+    void testDayFromDateThrowsException() throws InvalidArgumentException {
+        assertEquals(31, cal.dayFromDate("12/31", 2));
+        assertThrows(IllegalArgumentException.class, () -> {
+            cal.dayFromDate("1/32", 1);
+        });
+    }
+
+    @Test
+    void testMonthFromDateThrowsException() throws InvalidArgumentException {
+        assertEquals(12, cal.monthFromDate("12/25", 2));
+        assertThrows(IllegalArgumentException.class, () -> {
+            cal.monthFromDate("13/25", 2);
         });
     }
 
