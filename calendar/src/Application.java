@@ -13,7 +13,8 @@ import java.util.Scanner;
 
 public class Application {
 
-    final static int CELL_WIDTH = 5;
+    final static int CELL_WIDTH = 10;
+//    final static int CELL_WIDTH = 5;
 
     static int month;
     static int day;
@@ -119,7 +120,6 @@ public class Application {
      *
      * @param int row  Integer representing which row to display
      * @return void
-     * @exit Prints one week (1-4) of the month to stream
      */
     public static void drawRow(int row) {
         for (int rowHeight = 0; rowHeight < cellHeight(); rowHeight++) { // cell height number of rows
@@ -164,19 +164,19 @@ public class Application {
         int startCell = cal.getDayMonthStartsOn(); //TODO: fix this, wrong output
         int end = cal.getLastDayofMonth();
 
-        if (rowNumber == 0 && cellNumber < (startCell - 1)) {
+        if ((rowNumber == 0 && cellNumber < (startCell - 1)) || dayCount >= end) {
             System.out.print("  ");
         }
-        else if (dayCount <= end) {
-//            if (dayCount < 10) { // pad w/space to match spacing for double digits
-//                System.out.print(' ');
-//            }
-//            System.out.print(++dayCount);
-            System.out.print(new DecimalFormat("00").format(++dayCount));
+        else if (dayCount < end) {
+            if (dayCount < 9) { // pad w/space to match spacing for double digits
+                System.out.print(' ');
+            }
+            System.out.print(++dayCount);
+//            System.out.print(new DecimalFormat("00").format(++dayCount));
 //            System.out.printf("%2d", ++dayCount);
         }
         else {
-            System.out.print("  ");
+            System.out.print(" ");
         }
     }
 
