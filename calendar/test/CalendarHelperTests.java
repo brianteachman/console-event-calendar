@@ -38,7 +38,7 @@ class CalendarHelperTests {
     }
 
     @Test
-    void testValidateAndReturnIntBoundaries() {
+    void testValidateAndReturnIntThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> {
             cal.validateAndReturnInt("13", 12, "months");
         });

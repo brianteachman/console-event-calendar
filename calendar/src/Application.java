@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 public class Application {
 
-    final static int CELL_WIDTH = 5;
+    final static int CELL_WIDTH = 10;
 
     static int month;
     static int day;
@@ -59,7 +59,7 @@ public class Application {
         try { // try to fail gracefully
             setDate(inputData);
         }
-        catch (InvalidArgumentException e) {
+        catch (Exception e) {
             System.out.println(e.toString());
             promptForDate(); //TODO recursively reprompt? Why doesn't it work
         }
