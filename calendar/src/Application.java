@@ -13,8 +13,7 @@ import java.util.Scanner;
 
 public class Application {
 
-    final static int CELL_WIDTH = 10;
-//    final static int CELL_WIDTH = 5;
+    final static int CELL_WIDTH = 5;
 
     static int month;
     static int day;

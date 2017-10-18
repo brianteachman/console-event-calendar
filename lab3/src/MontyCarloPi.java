@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.text.DecimalFormat;
 
 /**
  * Brian Teachman
@@ -13,13 +14,17 @@ import java.awt.geom.Point2D;
  * a computer can be used to generate those conditions repeatedly. The number
  * of times the event occurs divided by the number of times the conditions
  * are generated should be approximately equal to Pi.
+ *
+ * https://en.wikipedia.org/wiki/Monte_Carlo_method
  */
 public class MontyCarloPi {
-    final static int NUM_OF_POINTS = (int) 1E20;
-    final static int SIDE_LENGTH = 2; // is square (n x n)
+    final static long NUM_OF_POINTS = (int) 1E10;
+    final static int SIDE_LENGTH = 1; // is square (n x n)
     final static double RADIUS = SIDE_LENGTH / 2.0;
 
     public static void main(String[] args) {
+        long startTime = System.currentTimeMillis();
+        //---------------------------------------------------------------------
         /*
          * Imagine we have a circle of radius R inscribed inside of a
          * square with side length 2R. This will mean that the circles
@@ -57,28 +62,25 @@ public class MontyCarloPi {
         int M = 0; // Found points in circle
         int N = 0; // Current iteration
         for (int i = 0; i < NUM_OF_POINTS; i++) {
-            Point2D.Double p1 = getRandomPoint();
-            boolean isPointInCircle = Math.sqrt(RADIUS) > (p1.getX() * p1.getX() + p1.getY() * p1.getY());
+            double x = Math.random()*RADIUS;
+            double y = Math.random()*RADIUS;
+//            print("<"+x+", "+y+">\n");
+            boolean isPointInCircle = (x*x + y*y) < (RADIUS * RADIUS);
             if (isPointInCircle) {
                 M++;
             }
             N++;
         }
-        print(M);
-        print(N);
-        print(calcPI(M, N));
+        System.out.printf("PI = %.4f", calcPI(M, N));
+
+        //---------------------------------------------------------------------
+        long stopTime = System.currentTimeMillis();
+        long elapsedTime = stopTime - startTime;
+//        print("".valueOf(elapsedTime)+" ms\n");
     }
 
     private static double calcPI(int m, int n) {
-        return (4.0 * m) / n;
-    }
-
-    public static Point2D.Double getRandomPoint() {
-        int range = (SIDE_LENGTH - 0) + 1;
-        double x = (Math.random() * range) + 0;
-        double y = (Math.random() * range) + 0;
-        Point2D.Double point = new Point2D.Double(x, y);
-        return point;
+        return (4.0 * m) / n; // 3.14159
     }
 
     public static void print(double num) {
