@@ -13,7 +13,7 @@ import static javafx.application.Application.launch;
 /**
  * Created by BTEACHMAN on 9/25/2017.
  */
-public class Window extends Application {
+public class JavaFXWindow extends Application {
 
     public void start(Stage theStage) {
         GridPane grid = new GridPane();

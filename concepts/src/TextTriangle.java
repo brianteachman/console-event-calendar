@@ -3,7 +3,7 @@
    CS 140
    9/22/2017
 */
-public class Figures2 {
+public class TextTriangle {
 
    public static void main(String[] args) {
       printTriangle();

@@ -23,6 +23,12 @@ public class CalendarHelper {
         this.cal = Calendar.getInstance();
     }
 
+    /**
+     *
+     * @param month
+     * @param day
+     * @return void
+     */
     public void setCalendarDate(int month, int day) {
 
         // set the time to the start of the day 00:00:00

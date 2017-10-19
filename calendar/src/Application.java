@@ -1,7 +1,9 @@
-/**
- * A console calendar
- *
- * Displays a given month
+/*
+    Brian Teachman
+    CS 140: Whatcom Community College
+    10/11/2017
+
+    A console calendar - displays a given month using the CalendarHelper class
  */
 
 import com.sun.javaws.exceptions.InvalidArgumentException;
