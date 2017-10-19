@@ -13,11 +13,11 @@ import java.util.Scanner;
 
 public class Application {
 
-    final static int CELL_WIDTH = 10;
+    final static int CELL_WIDTH = 5;
 
     static int month;
     static int day;
-    static CalendarHelper cal = new CalendarHelper();
+    static CalendarHelper helper = new CalendarHelper();
 
     public static void main(String[] args) {
 
@@ -31,8 +31,8 @@ public class Application {
         System.out.println("Month: " + month);
         System.out.println("Day:   " + day);
         System.out.println();
-        System.out.println("Start of the month: " + cal.getDayMonthStartsOn());
-        System.out.println("End of the month:   " + cal.getLastDayofMonth());
+        System.out.println("Start of the month: " + helper.getDayMonthStartsOn());
+        System.out.println("End of the month:   " + helper.getLastDayofMonth());
     }
 
     public static void asciiArt() {
@@ -52,6 +52,10 @@ public class Application {
         print("\n\n");
     }
 
+    /**
+     *
+     * @return String
+     */
     public static String promptForDate() {
         System.out.print("What date would you like like to look at? (mm/dd): ");
         Scanner input = new Scanner(System.in); // user prompt
@@ -59,8 +63,8 @@ public class Application {
         try { // try to fail gracefully
             setDate(inputData);
         }
-        catch (Exception e) {
-            System.out.println(e.toString());
+        catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
             promptForDate(); //TODO recursively reprompt? Why doesn't it work
         }
         return inputData;
@@ -75,15 +79,15 @@ public class Application {
      * @param inputData String
      * @throws IllegalArgumentException
      */
-    public static void setDate(String inputData) throws InvalidArgumentException {
+    public static void setDate(String inputData) throws IllegalArgumentException {
         int delimiterIndex = inputData.indexOf('/');
         if ( ! (delimiterIndex == 1 || delimiterIndex == 2)) { // accounts for '1' or '01' formatted case
             throw new IllegalArgumentException("Expected the format 'mm/dd', where mm is the month and dd is the day.");
         }
         // Is it more efficient to just pass the index in?
-        month = cal.monthFromDate(inputData, delimiterIndex);
-        day = cal.dayFromDate(inputData, delimiterIndex);
-        cal.setCalendarDate(month, day);
+        month = helper.monthFromDate(inputData, delimiterIndex);
+        day = helper.dayFromDate(inputData, delimiterIndex);
+        helper.setCalendarDate(month, day);
     }
 
     /*
@@ -91,6 +95,7 @@ public class Application {
      * the month as a text formatted calendar
      *
      * @param int month
+     * @param void
      */
     static public void drawMonth(int month) {
         rowHeader(CELL_WIDTH);
@@ -104,6 +109,7 @@ public class Application {
      * Print a row divider, some given width
      *
      * @param width
+     * @return void
      */
     public static void rowHeader(int width) {
         for (int i = 0; i < 7; i++) {
@@ -158,10 +164,16 @@ public class Application {
 
     private static int dayCount = 0;
 
+    /**
+     *
+     * @param rowNumber
+     * @param cellNumber
+     * return void
+     */
     public static void printCalendarDay(int rowNumber, int cellNumber) {
 
-        int startCell = cal.getDayMonthStartsOn(); //TODO: fix this, wrong output
-        int end = cal.getLastDayofMonth();
+        int startCell = helper.getDayMonthStartsOn(); //TODO: fix this, wrong output
+        int end = helper.getLastDayofMonth();
 
         if ((rowNumber == 0 && cellNumber < (startCell - 1)) || dayCount >= end) {
             System.out.print("  ");
@@ -177,16 +189,6 @@ public class Application {
         else {
             System.out.print(" ");
         }
-    }
-
-    /*
-     * Display the date information as a graphical representation of the calendar.
-     *
-     * @param int month
-     * @param int day
-     */
-    public void displayDate(int month, int day) {
-//        TODO: what exactly does this do?
     }
 
     public static void print(String thing) {

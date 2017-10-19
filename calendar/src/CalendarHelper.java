@@ -57,7 +57,13 @@ public class CalendarHelper {
         return this.cal.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
 
-    public void printFormattedToday() {
+    /*
+     * Display the date information as a graphical representation of the calendar.
+     *
+     * @param int month
+     * @param int day
+     */
+    public void displayDate(int month, int day) {
         System.out.printf("%d/%s/%s",
                 this.cal.get(Calendar.MONTH)+1,
                 this.cal.get(Calendar.DAY_OF_MONTH), "2017");
@@ -69,7 +75,7 @@ public class CalendarHelper {
      * @param String
      * @return int
      */
-    public int monthFromDate(String formatedDate, int delimiterIndex) throws InvalidArgumentException {
+    public int monthFromDate(String formatedDate, int delimiterIndex) throws IllegalArgumentException {
         String mm = formatedDate.substring(0, delimiterIndex);
         return validateAndReturnInt(mm, 12, "Months");
     }
@@ -80,7 +86,7 @@ public class CalendarHelper {
      * @param String
      * @return int
      */
-    public int dayFromDate(String formatedDate, int delimiterIndex) throws InvalidArgumentException {
+    public int dayFromDate(String formatedDate, int delimiterIndex) throws IllegalArgumentException {
         // Since I already have a call to indexOf stored in the parent scope, perhaps
         // its faster to just pass it index in, instead of call .indexOf again?
         String dd = formatedDate.substring(delimiterIndex+1);
@@ -96,11 +102,11 @@ public class CalendarHelper {
      * @return int
      */
     public int validateAndReturnInt(String dateSegment, int upperBound, String segmentName)
-            throws InvalidArgumentException {
+            throws IllegalArgumentException {
         dateSegment = removeLeadingZero(dateSegment);
         ArrayList<String> validSegments = getValidList(upperBound);
         if ( ! validSegments.contains(dateSegment)) { // check input is in valid month range
-            throw new IllegalArgumentException(String.format("%s range from 1 to %d. %s given.",
+            throw new IllegalArgumentException(String.format("\n%s range from 1 to %d. %s given.\n",
                     segmentName, upperBound, dateSegment));
         }
         return Integer.parseInt(dateSegment);
