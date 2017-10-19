@@ -1,6 +1,8 @@
 # CS 140: Computer Programming Fundamentals I
 
-This code is product of my efforts in CS 140, Computer Programming Fundamentals I class in the Fall of 2017.
+My working dir for CS140 class at Whatcom Communtiy College, based on the book Building Java Programs - A Back to Basics Approach (2E).
+
+This code is product of my efforts in CS140, Computer Programming Fundamentals I class in the Fall of 2017.
 
 ### Links
 
@@ -9,6 +11,8 @@ This code is product of my efforts in CS 140, Computer Programming Fundamentals 
 * [https://practiceit.cs.washington.edu/](https://practiceit.cs.washington.edu/)
 
 ### How do I get set up?
+
+*Note*: I havent got the integration with IntelliJ working yet.
 
 * Java 8 container running on an Ubuntu 16.04 docker image.
 
