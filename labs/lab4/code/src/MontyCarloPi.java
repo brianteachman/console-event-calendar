@@ -71,16 +71,17 @@ public class MontyCarloPi {
             }
             N++;
         }
-        System.out.printf("PI = %.4f", calcPI(M, N));
+        System.out.printf("PI = %.4f\n", calcPI(M, N));
 
         //---------------------------------------------------------------------
         long stopTime = System.currentTimeMillis();
         long elapsedTime = stopTime - startTime;
-//        print("".valueOf(elapsedTime)+" ms\n");
+        if (elapsedTime > 1E6) elapsedTime /= 1E3;
+        print("".valueOf(elapsedTime)+" ms\n");
     }
 
     private static double calcPI(int m, int n) {
-        return (4.0 * m) / n; // 3.14159
+        return (4.0 * m) / n; // 3.1416
     }
 
     public static void print(double num) {
