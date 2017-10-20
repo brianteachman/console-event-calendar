@@ -58,8 +58,7 @@ public class MontyCarloPi {
          * that indicates the approximate amount of points needed to get
          * an accurate approximation of pi to 4 decimal places.
          */
-
-        int M = 0; // Found points in circle
+        int M = 0; // Number of points that landed in circle
         int N = 0; // Current iteration
         for (int i = 0; i < NUM_OF_POINTS; i++) {
             double x = Math.random()*RADIUS;
@@ -74,10 +73,19 @@ public class MontyCarloPi {
         System.out.printf("PI = %.4f\n", calcPI(M, N));
 
         //---------------------------------------------------------------------
+        print("\n== DONE =========================\nRuntime: ");
+        printRuntime(startTime);
+    }
+
+    private static void printRuntime(long startTime) {
         long stopTime = System.currentTimeMillis();
         long elapsedTime = stopTime - startTime;
-        if (elapsedTime > 1E6) elapsedTime /= 1E3;
-        print("".valueOf(elapsedTime)+" ms\n");
+        String units = "ms";
+        if (elapsedTime > 1E3) {
+            elapsedTime /= 1E3;
+            units = "s";
+        }
+        print("".valueOf(elapsedTime)+units+"\n");
     }
 
     private static double calcPI(int m, int n) {
