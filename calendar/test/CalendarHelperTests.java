@@ -49,17 +49,17 @@ class CalendarHelperTests {
 
     @Test
     void testDayFromDateThrowsException() throws InvalidArgumentException {
-        assertEquals(31, cal.dayFromDate("12/31", 2));
+        assertEquals(31, cal.dayFromDate("12/31"));
         assertThrows(IllegalArgumentException.class, () -> {
-            cal.dayFromDate("1/32", 1);
+            cal.dayFromDate("1/32");
         });
     }
 
     @Test
     void testMonthFromDateThrowsException() throws InvalidArgumentException {
-        assertEquals(12, cal.monthFromDate("12/25", 2));
+        assertEquals(12, cal.monthFromDate("12/25"));
         assertThrows(IllegalArgumentException.class, () -> {
-            cal.monthFromDate("13/25", 2);
+            cal.monthFromDate("13/25");
         });
     }
 

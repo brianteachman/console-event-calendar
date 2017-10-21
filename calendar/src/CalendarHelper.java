@@ -16,11 +16,14 @@ public class CalendarHelper {
 
     private Calendar cal;
 
-    /**
-     * Constructor
-     */
+    static Integer delimiterIndex; // using Integer for nullability
+
     CalendarHelper() {
         this.cal = Calendar.getInstance();
+    }
+
+    public Calendar getCalendar() {
+        return this.cal;
     }
 
     /**
@@ -31,13 +34,13 @@ public class CalendarHelper {
      */
     public void setCalendarDate(int month, int day) {
 
+        this.cal.set(Calendar.DAY_OF_MONTH, day); // set day
+
         // set the time to the start of the day 00:00:00
         this.cal.set(Calendar.HOUR_OF_DAY, 0); // reset hour, clear doesn't reset the hour of day
         this.cal.clear(Calendar.MINUTE);       // reset minutes
         this.cal.clear(Calendar.SECOND);       // reset seconds
         this.cal.clear(Calendar.MILLISECOND);  // reset millis
-
-        this.cal.set(Calendar.DAY_OF_MONTH, day); // set day
 
         int thisMonth = this.cal.get(Calendar.MONTH); // set the month
         this.cal.add(Calendar.MONTH, (month-1) - thisMonth);
@@ -68,11 +71,19 @@ public class CalendarHelper {
      *
      * @param int month
      * @param int day
+     * @return void
      */
     public void displayDate(int month, int day) {
         System.out.printf("%d/%s/%s",
                 this.cal.get(Calendar.MONTH)+1,
                 this.cal.get(Calendar.DAY_OF_MONTH), "2017");
+    }
+
+    public static int getDelimiterIndex(String inputData) {
+        if (delimiterIndex == null) { // only iterate through the string once
+            delimiterIndex = inputData.indexOf('/');
+        }
+        return delimiterIndex;
     }
 
     /*
@@ -81,8 +92,8 @@ public class CalendarHelper {
      * @param String
      * @return int
      */
-    public int monthFromDate(String formatedDate, int delimiterIndex) throws IllegalArgumentException {
-        String mm = formatedDate.substring(0, delimiterIndex);
+    public int monthFromDate(String formatedDate) throws IllegalArgumentException {
+        String mm = formatedDate.substring(0, getDelimiterIndex(formatedDate));
         return validateAndReturnInt(mm, 12, "Months");
     }
 
@@ -92,10 +103,8 @@ public class CalendarHelper {
      * @param String
      * @return int
      */
-    public int dayFromDate(String formatedDate, int delimiterIndex) throws IllegalArgumentException {
-        // Since I already have a call to indexOf stored in the parent scope, perhaps
-        // its faster to just pass it index in, instead of call .indexOf again?
-        String dd = formatedDate.substring(delimiterIndex+1);
+    public int dayFromDate(String formatedDate) throws IllegalArgumentException {
+        String dd = formatedDate.substring(getDelimiterIndex(formatedDate)+1);
         return validateAndReturnInt(dd, 31, "Days");
     }
 

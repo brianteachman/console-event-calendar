@@ -84,13 +84,12 @@ public class Application extends PrintCandy {
      * @throws IllegalArgumentException
      */
     public static void setDate(String inputData) throws IllegalArgumentException {
-        int delimiterIndex = inputData.indexOf('/');
+        int delimiterIndex = helper.getDelimiterIndex(inputData);
         if ( ! (delimiterIndex == 1 || delimiterIndex == 2)) { // accounts for '1' or '01' formatted case
             throw new IllegalArgumentException("Expected the format 'mm/dd', where mm is the month and dd is the day.");
         }
-        // Is it more efficient to just pass the index in?
-        month = helper.monthFromDate(inputData, delimiterIndex);
-        day = helper.dayFromDate(inputData, delimiterIndex);
+        month = helper.monthFromDate(inputData);
+        day = helper.dayFromDate(inputData);
         helper.setCalendarDate(month, day);
 
         startWeekDay = helper.getDayMonthStartsOn(); //TODO: fix this, wrong output
