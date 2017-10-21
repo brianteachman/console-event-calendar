@@ -1,5 +1,3 @@
-import java.text.DecimalFormat;
-
 /**
  * Quadratic Equation Root Solver
  *
@@ -29,7 +27,6 @@ Example usage:
 public class QuadraticSolver {
     protected Double a, b, c;
     private int precision = 2;
-    private DecimalFormat df;
 
     QuadraticSolver(double a, double b, double c, int precision) {
         setCoefficients(a, b, c);
@@ -101,14 +98,5 @@ public class QuadraticSolver {
         x1 = ((long) (x1 * scalar)) / scalar; // round to precision
         x2 = ((long) (x2 * scalar)) / scalar;
         return new double[]{x1, x2};
-    }
-
-    private void setStringFormatPrecision(int precision) {
-        String pattern = "#";
-        if (precision > 0) pattern += ".";
-        for (int i=0; i < precision; i++) {
-            pattern += "#";
-        }
-        df = new DecimalFormat(pattern);
     }
 }
