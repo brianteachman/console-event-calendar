@@ -13,28 +13,31 @@ import java.util.Scanner;
 
 // https://docs.oracle.com/javase/8/docs/api/java/util/Calendar.html
 
-public class Application {
+public class Application extends PrintCandy {
 
-    final static int CELL_WIDTH = 5;
+    final static int CELL_WIDTH = 4;
 
     static int month;
     static int day;
     static CalendarHelper helper = new CalendarHelper();
+
+    static int startWeekDay;
+    static int daysInMonth;
 
     public static void main(String[] args) {
 
         asciiArt();
 
         String date = promptForDate();
-        System.out.println("Your calandar for "+month+"/"+day+":\n");
+        println("Your calandar for "+month+"/"+day+":\n");
 
         drawMonth(month);
 
-        System.out.println("Month: " + month);
-        System.out.println("Day:   " + day);
-        System.out.println();
-        System.out.println("Start of the month: " + helper.getDayMonthStartsOn());
-        System.out.println("End of the month:   " + helper.getLastDayofMonth());
+        println("Month: " + month);
+        println("Day:   " + day);
+        println();
+        println("Start of the month: " + startWeekDay);
+        println("End of the month:   " + daysInMonth);
     }
 
     public static void asciiArt() {
@@ -55,7 +58,6 @@ public class Application {
     }
 
     /**
-     *
      * @return String
      */
     public static String promptForDate() {
@@ -67,7 +69,7 @@ public class Application {
         }
         catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
-            promptForDate(); // fail gracefully
+            promptForDate(); // fail gracefully (recursive reprompt)
         }
         return inputData;
     }
@@ -90,6 +92,9 @@ public class Application {
         month = helper.monthFromDate(inputData, delimiterIndex);
         day = helper.dayFromDate(inputData, delimiterIndex);
         helper.setCalendarDate(month, day);
+
+        startWeekDay = helper.getDayMonthStartsOn(); //TODO: fix this, wrong output
+        daysInMonth = helper.getLastDayofMonth();
     }
 
     /*
@@ -116,10 +121,10 @@ public class Application {
     public static void rowHeader(int width) {
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < width; j++) {
-                System.out.print('=');
+                print("=");
             }
         }
-        System.out.print("=\n");
+        print("=\n");
     }
 
     /*
@@ -130,7 +135,7 @@ public class Application {
      */
     public static void drawRow(int row) {
         for (int rowHeight = 0; rowHeight < cellHeight(); rowHeight++) { // cell height number of rows
-            System.out.print("|"); // start row
+            print("|"); // start row
             for (int cellNumber = 0; cellNumber < 7; cellNumber++) { // 7 cells for 7 days
                 for (int k = 0; k < CELL_WIDTH; k++) { // cell content
                     if (k == 1 && rowHeight == 0) { // after one blank space on the first row
@@ -139,13 +144,13 @@ public class Application {
                         k++; // account for double digit format
 
                     } else if (k == (CELL_WIDTH - 1)) {
-                        System.out.print("|"); // end of cell
+                        print("|"); // end of cell
                     } else {
-                        System.out.print(' '); // pad cell
+                        print(" "); // pad cell
                     }
                 }
             }
-            System.out.print("\n"); // end of row
+            println(); // end of row
         }
     }
 
@@ -174,26 +179,20 @@ public class Application {
      */
     public static void printCalendarDay(int rowNumber, int cellNumber) {
 
-        int startCell = helper.getDayMonthStartsOn(); //TODO: fix this, wrong output
-        int end = helper.getLastDayofMonth();
-
-        if ((rowNumber == 0 && cellNumber < (startCell - 1)) || dayCount >= end) {
-            System.out.print("  ");
+        if ((rowNumber == 0 && cellNumber < (startWeekDay - 1)) || dayCount >= daysInMonth) {
+            print("  ");
         }
-        else if (dayCount < end) {
+        else if (dayCount < daysInMonth) {
             if (dayCount < 9) { // pad w/space to match spacing for double digits
-                System.out.print(' ');
+                print(" ");
             }
-            System.out.print(++dayCount);
-//            System.out.print(new DecimalFormat("00").format(++dayCount));
-//            System.out.printf("%2d", ++dayCount);
+            print(++dayCount);
+//            print(new DecimalFormat("00").format(++dayCount));
+//            print("%2d", ++dayCount);
         }
         else {
-            System.out.print(" ");
+            print(" ");
         }
     }
 
-    public static void print(String thing) {
-        System.out.print(thing);
-    }
 }
