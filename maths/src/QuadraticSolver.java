@@ -34,15 +34,17 @@ public class QuadraticSolver {
     QuadraticSolver(double a, double b, double c, int precision) {
         setCoefficients(a, b, c);
         this.precision = precision;
+        /*
+         * Use getRoots() when instantiated this way
+         */
     }
-
     QuadraticSolver(double a, double b, double c) {
         setCoefficients(a, b, c);
-        setStringFormatPrecision(2);
+        /*
+         * Use getRoots() when instantiated this way
+         */
     }
-    QuadraticSolver() {
-        setStringFormatPrecision(2);
-    }
+    QuadraticSolver() { /* Use findRoots(a, b, c) or setCoefficients(a, b, c) then getRoots() */ }
 
     public double[] findRoots(double a, double b, double c) throws ArithmeticException {
         // https://en.wikipedia.org/wiki/Quadratic_equation#Discriminant

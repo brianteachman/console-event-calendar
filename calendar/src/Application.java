@@ -62,12 +62,12 @@ public class Application {
         System.out.print("What date would you like like to look at? (mm/dd): ");
         Scanner input = new Scanner(System.in); // user prompt
         String inputData = input.nextLine(); // in-line processing
-        try { // try to fail gracefully
+        try {
             setDate(inputData);
         }
         catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
-            promptForDate(); //TODO recursively reprompt? Why doesn't it work
+            promptForDate(); // fail gracefully
         }
         return inputData;
     }
