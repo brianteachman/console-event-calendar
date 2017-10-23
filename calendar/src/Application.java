@@ -42,17 +42,24 @@ public class Application extends PrintCandy {
 
     public static void asciiArt() {
         int rows = 10;
-        int cols = 20;
-
+        int cols = CELL_WIDTH +4 * 7;
         for (int i=0; i < rows; i++) {
-//            for (int j=0; j < cols; j++) {
-//                if (j % 5 == 0) print("/");
-//                if (j == 19) print("\n");
-//                if (i % 3 == 0 || j < 10) {
-//                    print("/");
-//                }
-//            }
-//            print("-");
+            for (int j=0; j < cols; j++) {
+                int rchar = (char) (Math.random()*95)+37;
+                if (rchar % 2 == 0) {
+                    print((char) rchar);
+                }
+                else if (rchar % 3 == 0) {
+                    print(" <> ");
+                }
+                else if (rchar % 13 == 0) {
+                    print(" |:) ");
+                }
+                else {
+                    print(" ");
+                }
+            }
+            print("\n");
         }
         print("\n\n");
     }

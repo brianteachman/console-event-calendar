@@ -81,20 +81,13 @@ public class CalendarHelper {
 
     public static int getDelimiterIndex(String inputData) {
         if (delimiterIndex == null) { // only iterate through the string once
-            delimiterIndex = inputData.indexOf('/');
+            setDelimiterIndex(inputData);
         }
         return delimiterIndex;
     }
 
-    /*
-     * Given a date as a String, extract an integer value for the month and return it.
-     *
-     * @param String
-     * @return int
-     */
-    public int monthFromDate(String formatedDate) throws IllegalArgumentException {
-        String mm = formatedDate.substring(0, getDelimiterIndex(formatedDate));
-        return validateAndReturnInt(mm, 12, "Months");
+    public static void setDelimiterIndex(String inputData) {
+        delimiterIndex = inputData.indexOf("/");
     }
 
     /*
@@ -104,8 +97,21 @@ public class CalendarHelper {
      * @return int
      */
     public int dayFromDate(String formatedDate) throws IllegalArgumentException {
-        String dd = formatedDate.substring(getDelimiterIndex(formatedDate)+1);
+//        String dd = formatedDate.substring(getDelimiterIndex(formatedDate)+1);
+        String dd = formatedDate.substring(formatedDate.indexOf("/")+1);
         return validateAndReturnInt(dd, 31, "Days");
+    }
+
+    /*
+     * Given a date as a String, extract an integer value for the month and return it.
+     *
+     * @param String
+     * @return int
+     */
+    public int monthFromDate(String formatedDate) throws IllegalArgumentException {
+//        String mm = formatedDate.substring(0, getDelimiterIndex(formatedDate));
+        String mm = formatedDate.substring(0, formatedDate.indexOf("/"));
+        return validateAndReturnInt(mm, 12, "Months");
     }
 
     /**

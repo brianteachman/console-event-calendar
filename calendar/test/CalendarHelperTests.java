@@ -51,7 +51,8 @@ class CalendarHelperTests {
     void testDayFromDateThrowsException() throws InvalidArgumentException {
         assertEquals(31, cal.dayFromDate("12/31"));
         assertThrows(IllegalArgumentException.class, () -> {
-            cal.dayFromDate("1/32");
+            int day = cal.dayFromDate("1/32");
+            assertEquals(32, day);
         });
     }
 
