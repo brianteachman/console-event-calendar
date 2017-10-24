@@ -6,16 +6,13 @@
     A console calendar - displays a given month using the CalendarHelper class
  */
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
-
-import java.text.DecimalFormat;
 import java.util.Scanner;
 
 // https://docs.oracle.com/javase/8/docs/api/java/util/Calendar.html
 
 public class Application extends PrintCandy {
 
-    final static int CELL_WIDTH = 4;
+    final static int CELL_WIDTH = 5;
 
     static int month;
     static int day;
@@ -26,7 +23,7 @@ public class Application extends PrintCandy {
 
     public static void main(String[] args) {
 
-        asciiArt();
+        abstractASCIIArt();
 
         String date = promptForDate();
         println("Your calandar for "+month+"/"+day+":\n");
@@ -40,9 +37,9 @@ public class Application extends PrintCandy {
         println("End of the month:   " + daysInMonth);
     }
 
-    public static void asciiArt() {
+    public static void abstractASCIIArt() {
         int rows = 10;
-        int cols = CELL_WIDTH +4 * 7;
+        int cols = CELL_WIDTH * 7;
         for (int i=0; i < rows; i++) {
             for (int j=0; j < cols; j++) {
                 int rchar = (char) (Math.random()*95)+37;
@@ -50,10 +47,15 @@ public class Application extends PrintCandy {
                     print((char) rchar);
                 }
                 else if (rchar % 3 == 0) {
-                    print(" <> ");
+                    if (i % 3== 0) {
+                        print(" >< ");
+                    }
+                    else {
+                        print(" <> ");
+                    }
                 }
                 else if (rchar % 13 == 0) {
-                    print(" |:) ");
+                    print(" :) ");
                 }
                 else {
                     print(" ");
