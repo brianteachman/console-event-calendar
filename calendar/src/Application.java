@@ -16,12 +16,14 @@ public class Application extends PrintCandy {
 
     static int month;
     static int day;
-    static CalendarHelper helper = new CalendarHelper();
+    static CalendarHelper helper;
 
     static int startWeekDay;
     static int daysInMonth;
 
     public static void main(String[] args) {
+
+        helper = new CalendarHelper();
 
         abstractASCIIArt();
 
@@ -94,6 +96,9 @@ public class Application extends PrintCandy {
      */
     public static void setDate(String inputData) throws IllegalArgumentException {
         int delimiterIndex = helper.getDelimiterIndex(inputData);
+        // TODO: move date formatting validation into it's mutator method?
+        //       trying to keep view (the error message) data in the Application class
+        //       and passing the error message through two method calls seems extreme
         if ( ! (delimiterIndex == 1 || delimiterIndex == 2)) { // accounts for '1' or '01' formatted case
             throw new IllegalArgumentException("Expected the format 'mm/dd', where mm is the month and dd is the day.");
         }

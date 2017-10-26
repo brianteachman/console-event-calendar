@@ -16,7 +16,8 @@ public class CalendarHelper {
 
     private Calendar cal;
 
-    static Integer delimiterIndex; // using Integer for nullability
+    private String formattedDate;
+    private Integer delimiterIndex; // using Integer for nullability
 
     CalendarHelper() {
         this.cal = Calendar.getInstance();
@@ -79,15 +80,20 @@ public class CalendarHelper {
                 this.cal.get(Calendar.DAY_OF_MONTH), "2017");
     }
 
-    public static int getDelimiterIndex(String inputData) {
-        if (delimiterIndex == null) { // only iterate through the string once
-            setDelimiterIndex(inputData);
+    public int getDelimiterIndex(String formattedDate) {
+        if (delimiterIndex == null || !this.formattedDate.equals(formattedDate)) { // only iterate through the string once
+            setDelimiterIndex(formattedDate);
+            this.formattedDate = formattedDate;
         }
-        return delimiterIndex;
+        return this.delimiterIndex;
     }
 
-    public static void setDelimiterIndex(String inputData) {
-        delimiterIndex = inputData.indexOf("/");
+    public void setDelimiterIndex(String formattedDate) {
+        delimiterIndex = formattedDate.indexOf("/");
+        // TODO: considering moving date formatting validation here?
+//        if ( ! (delimiterIndex == 1 || delimiterIndex == 2)) { // accounts for '1' or '01' formatted case
+//            throw new IllegalArgumentException("Expected the format 'mm/dd', where mm is the month and dd is the day.");
+//        }
     }
 
     /*
@@ -97,8 +103,7 @@ public class CalendarHelper {
      * @return int
      */
     public int dayFromDate(String formatedDate) throws IllegalArgumentException {
-//        String dd = formatedDate.substring(getDelimiterIndex(formatedDate)+1);
-        String dd = formatedDate.substring(formatedDate.indexOf("/")+1);
+        String dd = formatedDate.substring(getDelimiterIndex(formatedDate)+1);
         return validateAndReturnInt(dd, 31, "Days");
     }
 
@@ -109,8 +114,7 @@ public class CalendarHelper {
      * @return int
      */
     public int monthFromDate(String formatedDate) throws IllegalArgumentException {
-//        String mm = formatedDate.substring(0, getDelimiterIndex(formatedDate));
-        String mm = formatedDate.substring(0, formatedDate.indexOf("/"));
+        String mm = formatedDate.substring(0, getDelimiterIndex(formatedDate));
         return validateAndReturnInt(mm, 12, "Months");
     }
 
