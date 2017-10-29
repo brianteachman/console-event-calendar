@@ -9,26 +9,28 @@ import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 public class CalendarHelper {
 
     public int[] monthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-    private Calendar cal;
+    public Calendar cal;
 
     private String formattedDate;
     private Integer delimiterIndex; // using Integer for nullability
 
     CalendarHelper() {
         this.cal = Calendar.getInstance();
+//        this.cal.setTimeZone(TimeZone.getTimeZone("America/Vancouver"));
     }
+
 
     public Calendar getCalendar() {
         return this.cal;
     }
 
     /**
-     *
      * @param month
      * @param day
      * @return void

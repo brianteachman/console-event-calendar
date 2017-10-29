@@ -6,6 +6,7 @@
     A console calendar - displays a given month using the CalendarHelper class
  */
 
+import java.util.Calendar;
 import java.util.Scanner;
 
 // https://docs.oracle.com/javase/8/docs/api/java/util/Calendar.html
@@ -25,10 +26,13 @@ public class Application extends PrintCandy {
 
         helper = new CalendarHelper();
 
-        abstractASCIIArt();
+
+//        abstractASCIIArt();
 
         String date = promptForDate();
         println("Your calandar for "+month+"/"+day+":\n");
+
+        print(helper.cal.get(Calendar.DAY_OF_WEEK));
 
         drawMonth(month);
 
