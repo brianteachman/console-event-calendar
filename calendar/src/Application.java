@@ -6,7 +6,6 @@
     A console calendar - displays a given month using the CalendarHelper class
  */
 
-import java.util.Calendar;
 import java.util.Scanner;
 
 // https://docs.oracle.com/javase/8/docs/api/java/util/Calendar.html
@@ -15,78 +14,98 @@ public class Application extends PrintCandy {
 
     final static int CELL_WIDTH = 5;
 
-    static int month;
-    static int day;
-    static CalendarHelper helper;
-
-    static int startWeekDay;
-    static int daysInMonth;
+    private static CalendarHelper helper;
+    private static Scanner input;
+    private static boolean dateIsSet = false;
 
     public static void main(String[] args) {
 
         helper = new CalendarHelper();
+        input = new Scanner(System.in); // user prompt
 
+//        stupidASCIIArt();
 
-//        abstractASCIIArt();
+        boolean running = true;
+        while (running) {
+            switch (menu()) {
+                case 'e':
+                    store(promptForDate());
+                    drawMonth();
+                    break;
 
-        String date = promptForDate();
-        println("Your calandar for "+month+"/"+day+":\n");
+                case 't':
+                    store(helper.getMonth()+"/"+helper.getDay());
+                    drawMonth();
+                    break;
 
-        print(helper.cal.get(Calendar.DAY_OF_WEEK));
-
-        drawMonth(month);
-
-        println("Month: " + month);
-        println("Day:   " + day);
-        println();
-        println("Start of the month: " + startWeekDay);
-        println("End of the month:   " + daysInMonth);
-    }
-
-    public static void abstractASCIIArt() {
-        int rows = 10;
-        int cols = CELL_WIDTH * 7;
-        for (int i=0; i < rows; i++) {
-            for (int j=0; j < cols; j++) {
-                int rchar = (char) (Math.random()*95)+37;
-                if (rchar % 2 == 0) {
-                    print((char) rchar);
-                }
-                else if (rchar % 3 == 0) {
-                    if (i % 3== 0) {
-                        print(" >< ");
+                case 'n':
+                    if (dateIsSet) {
+                        helper.nextMonth();
+                        drawMonth();
                     }
                     else {
-                        print(" <> ");
+                        println("\nYou need to have a calendar displayed first.");
                     }
-                }
-                else if (rchar % 13 == 0) {
-                    print(" :) ");
-                }
-                else {
-                    print(" ");
-                }
+                    break;
+
+                case 'p':
+                    if (dateIsSet) {
+                        helper.previousMonth();
+                        drawMonth();
+                    }
+                    else {
+                        println("\nYou need to have a calendar displayed first.");
+                    }
+                    break;
+
+                case 'q':
+                    running = false;
+                    break;
+
+                default:
+                    println("Please enter a valid command.");
+                    break;
             }
-            print("\n");
+//            println("Start of the month: " + helper.getDayMonthStartsOn());
+//            println("End of the month:   " + helper.getLastDayofMonth());
         }
-        print("\n\n");
+
     }
 
     /**
-     * @return String
+     * @return char  The selected menu item. ("e", "t", "n", "p", or "q")
+     */
+    public static char menu() {
+        println("\nPlease type a command");
+        println("    \"e\" to enter a date and display the corresponding");
+        println("    \"t\" to get todays date and display today's calendar");
+        println("    \"n\" to display the next month");
+        println("    \"p\" to display the previous month");
+        println("    \"q\" to quit the program");
+        String command = input.nextLine();
+        if (command.length() > 0) {
+            return command.charAt(0);
+        }
+        return 'x';
+    }
+
+    /**
+     * @return String  Returns a date string in the format mm/dd
      */
     public static String promptForDate() {
-        System.out.print("What date would you like like to look at? (mm/dd): ");
-        Scanner input = new Scanner(System.in); // user prompt
-        String inputData = input.nextLine(); // in-line processing
+        print("What date would you like like to look at? (mm/dd): ");
+        return input.nextLine(); // in-line processing
+    }
+
+    private static void store(String inputData) {
         try {
-            setDate(inputData);
+            setCalendarData(inputData);
         }
         catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
-            promptForDate(); // fail gracefully (recursive reprompt)
+            store(promptForDate()); // fail gracefully (recursive reprompt)
         }
-        return inputData;
+        dateIsSet = true;
     }
 
     /**
@@ -98,7 +117,7 @@ public class Application extends PrintCandy {
      * @param inputData String
      * @throws IllegalArgumentException
      */
-    public static void setDate(String inputData) throws IllegalArgumentException {
+    public static void setCalendarData(String inputData) throws IllegalArgumentException {
         int delimiterIndex = helper.getDelimiterIndex(inputData);
         // TODO: move date formatting validation into it's mutator method?
         //       trying to keep view (the error message) data in the Application class
@@ -106,14 +125,11 @@ public class Application extends PrintCandy {
         if ( ! (delimiterIndex == 1 || delimiterIndex == 2)) { // accounts for '1' or '01' formatted case
             throw new IllegalArgumentException("Expected the format 'mm/dd', where mm is the month and dd is the day.");
         }
-        month = helper.monthFromDate(inputData);
-        day = helper.dayFromDate(inputData);
-        helper.setCalendarDate(month, day);
-
-        startWeekDay = helper.getDayMonthStartsOn(); //TODO: fix this, wrong output
-        daysInMonth = helper.getLastDayofMonth();
+        helper.setCalendarDate(inputData);
     }
 
+    private static int dayCount = 0; // for tracking days in printCalendarDay
+    // TODO: refactor this global
     /*
      * Accepts an integer representing the month and displays
      * the month as a text formatted calendar
@@ -121,12 +137,15 @@ public class Application extends PrintCandy {
      * @param int month
      * @param void
      */
-    static public void drawMonth(int month) {
+    static public void drawMonth() {
+        println("\n"+helper.getDateLong());
         rowHeader(CELL_WIDTH);
         for (int i = 0; i < 5; i++) { // 5 weeks
             drawRow(i);
             rowHeader(CELL_WIDTH);
         }
+        displayDate(helper.getMonth(), helper.getDay());
+        dayCount = 0;
     }
 
     /**
@@ -186,8 +205,6 @@ public class Application extends PrintCandy {
         return rowHieght;
     }
 
-    private static int dayCount = 0;
-
     /**
      *
      * @param rowNumber
@@ -195,6 +212,8 @@ public class Application extends PrintCandy {
      * return void
      */
     public static void printCalendarDay(int rowNumber, int cellNumber) {
+        int startWeekDay = helper.getDayMonthStartsOn();
+        int daysInMonth = helper.getLastDayofMonth();
 
         if ((rowNumber == 0 && cellNumber < (startWeekDay - 1)) || dayCount >= daysInMonth) {
             print("  ");
@@ -210,6 +229,47 @@ public class Application extends PrintCandy {
         else {
             print(" ");
         }
+    }
+
+    /**
+     *
+     * @param month
+     * @param day
+     * @return void
+     */
+    public static void displayDate(int month, int day) {
+        println("\nMonth: " + month);
+        println("Day:   " + day);
+    }
+
+
+    public static void stupidASCIIArt() {
+        int rows = 10;
+        int cols = CELL_WIDTH * 7;
+        for (int i=0; i < rows; i++) {
+            for (int j=0; j < cols; j++) {
+                int rchar = (char) (Math.random()*95)+37;
+                if (rchar % 2 == 0) {
+                    print((char) rchar);
+                }
+                else if (rchar % 3 == 0) {
+                    if (i % 3== 0) {
+                        print(" >< ");
+                    }
+                    else {
+                        print(" <> ");
+                    }
+                }
+                else if (rchar % 13 == 0) {
+                    print(" :) ");
+                }
+                else {
+                    print(" ");
+                }
+            }
+            print("\n");
+        }
+        print("\n\n");
     }
 
 }

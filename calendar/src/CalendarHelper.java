@@ -5,7 +5,6 @@
 
     Java 8 Calendar Wrapper: console calendar helper class.
 */
-import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,39 +13,91 @@ import java.util.TimeZone;
 public class CalendarHelper {
 
     public int[] monthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    private String[] monthName = { "January", "February", "March", "April", "May", "June", "July",
+            "August", "September", "October", "November", "December" };
 
-    public Calendar cal;
+    private Calendar cal;
+    private int currentMonth;
+    private int currentDay;
+    private int currentYear;
 
     private String formattedDate;
     private Integer delimiterIndex; // using Integer for nullability
 
     CalendarHelper() {
-        this.cal = Calendar.getInstance();
-//        this.cal.setTimeZone(TimeZone.getTimeZone("America/Vancouver"));
-    }
-
-
-    public Calendar getCalendar() {
-        return this.cal;
+        this.cal = Calendar.getInstance(TimeZone.getTimeZone("America/Vancouver"));
     }
 
     /**
-     * @param month
-     * @param day
+     * @param formattedDate
      * @return void
      */
-    public void setCalendarDate(int month, int day) {
+    public void setCalendarDate(String formattedDate) {
+        // minus 1 to convert month to index
+        this.cal.set(Calendar.MONTH, this.monthFromDate(formattedDate) - 1);
+        this.cal.set(Calendar.DAY_OF_MONTH, this.dayFromDate(formattedDate));
+        this.cal.set(Calendar.YEAR, 2017);
+    }
 
-        this.cal.set(Calendar.DAY_OF_MONTH, day); // set day
+    public void nextMonth() {
+        this.addMonthDelta(1);
+    }
 
+    public void previousMonth() {
+        this.addMonthDelta(-1);
+    }
+
+    private void addMonthDelta(int nextMonth) {
+        int thisMonth = this.getMonth() + 1; // convert from index to month number
+        this.cal.add(Calendar.MONTH, thisMonth - (thisMonth - nextMonth));
+    }
+
+    private void zeroOutTime() {
         // set the time to the start of the day 00:00:00
         this.cal.set(Calendar.HOUR_OF_DAY, 0); // reset hour, clear doesn't reset the hour of day
         this.cal.clear(Calendar.MINUTE);       // reset minutes
         this.cal.clear(Calendar.SECOND);       // reset seconds
         this.cal.clear(Calendar.MILLISECOND);  // reset millis
+    }
 
-        int thisMonth = this.cal.get(Calendar.MONTH); // set the month
-        this.cal.add(Calendar.MONTH, (month-1) - thisMonth);
+    public int getMonth() {
+        return this.cal.get(Calendar.MONTH) + 1;
+    }
+
+    public int getDay() {
+        return this.cal.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public int getYear() {
+        return this.cal.get(Calendar.YEAR);
+    }
+
+    public String getMonthName() {
+        return this.monthName[this.cal.get(Calendar.MONTH)];
+    }
+
+    /*
+     * Display the date information as a graphical representation of the calendar.
+     *
+     * @param cal
+     * @return String
+     */
+    public String getDateLong() {
+        return this.getMonthName() + " " +
+                this.cal.get(Calendar.DAY_OF_MONTH) + ", " +
+                this.cal.get(Calendar.YEAR);
+    }
+
+    /*
+     * Display the date information as a graphical representation of the calendar.
+     *
+     * @param cal
+     * @return String
+     */
+    public String getDateShort() {
+        return this.cal.get(Calendar.MONTH)+1 + "/" +
+                this.cal.get(Calendar.DAY_OF_MONTH) + "/" +
+                this.cal.get(Calendar.YEAR);
     }
 
     /**
@@ -69,19 +120,6 @@ public class CalendarHelper {
         return this.cal.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
 
-    /*
-     * Display the date information as a graphical representation of the calendar.
-     *
-     * @param int month
-     * @param int day
-     * @return void
-     */
-    public void displayDate(int month, int day) {
-        System.out.printf("%d/%s/%s",
-                this.cal.get(Calendar.MONTH)+1,
-                this.cal.get(Calendar.DAY_OF_MONTH), "2017");
-    }
-
     public int getDelimiterIndex(String formattedDate) {
         if (delimiterIndex == null || !this.formattedDate.equals(formattedDate)) { // only iterate through the string once
             setDelimiterIndex(formattedDate);
@@ -94,7 +132,7 @@ public class CalendarHelper {
         delimiterIndex = formattedDate.indexOf("/");
         // TODO: considering moving date formatting validation here?
 //        if ( ! (delimiterIndex == 1 || delimiterIndex == 2)) { // accounts for '1' or '01' formatted case
-//            throw new IllegalArgumentException("Expected the format 'mm/dd', where mm is the month and dd is the day.");
+//            throw new IllegalArgumentException();
 //        }
     }
 
@@ -140,7 +178,7 @@ public class CalendarHelper {
     }
 
     /**
-     * Build a list of ascii integers representing months and days (for easy range checking)
+     * Build a list of integers representing months and days (for easy range checking)
      *
      * @param upperBound int
      * @return ArrayList<String>

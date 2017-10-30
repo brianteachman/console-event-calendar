@@ -68,7 +68,7 @@ class CalendarHelperTests {
     void testFirstAndLastDayOfEachMonthIn2017() {
         int[] monthStarts = {1, 4, 4, 7, 2, 5, 7, 3, 6, 1, 4, 6};
         for (int i=0; i < cal.monthDays.length; i++) {
-            cal.setCalendarDate(i+1, 1);
+            cal.setCalendarDate(i+1+"/1");
             assertEquals(monthStarts[i], cal.getDayMonthStartsOn());
             assertEquals( cal.monthDays[i], cal.getLastDayofMonth());
         }
