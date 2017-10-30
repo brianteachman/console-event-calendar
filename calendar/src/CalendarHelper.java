@@ -76,6 +76,9 @@ public class CalendarHelper {
         return this.monthName[this.cal.get(Calendar.MONTH)];
     }
 
+    public boolean isCurrentDay(int day) {
+        return day == this.getDay();
+    }
     /*
      * Display the date information as a graphical representation of the calendar.
      *
