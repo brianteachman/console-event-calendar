@@ -1,5 +1,9 @@
 import java.util.function.*;
 
+/*
+ * https://michaelcotterell.com/blog/2015/2/calculus-via-lambdas-in-java-8
+ */
+
 public class Calculus {
     private int info;
 
