@@ -1,7 +1,7 @@
 /**
  * Created by BTEACHMAN on 9/27/2017.
  */
-public class LoopStart {
+public class LoopsIntro {
     public static void main(String[] args) {
 
         int bookCount = 56;

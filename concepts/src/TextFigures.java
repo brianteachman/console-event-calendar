@@ -1,4 +1,5 @@
-public class Figures1 {
+public class TextFigures
+{
     public static void main(String[] args) {
         egg();
         System.out.println();

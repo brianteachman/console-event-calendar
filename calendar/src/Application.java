@@ -177,9 +177,15 @@ public class Application extends PrintCandy {
                     if (k == 1 && rowHeight == 0) { // after one blank space on the first row
 
                         printCalendarDay(row, cellNumber);
-                        k++; // account for double digit format
-
-                    } else if (k == (CELL_WIDTH - 1)) {
+                        if (helper.isCurrentDay(dayCount)) {
+                            print("*"); //TODO: mark the current day
+                            k += 2; // account for double digit format
+                        }
+                        else {
+                            k++; // account for double digit format
+                        }
+                    }
+                    else if (k == (CELL_WIDTH - 1)) {
                         print("|"); // end of cell
                     } else {
                         print(" "); // pad cell
@@ -241,7 +247,6 @@ public class Application extends PrintCandy {
         println("\nMonth: " + month);
         println("Day:   " + day);
     }
-
 
     public static void stupidASCIIArt() {
         int rows = 10;
