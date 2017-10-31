@@ -4,7 +4,6 @@
  *
  * License: http://www.wtfpl.net/txt/copying/
  */
-import java.awt.Point;
 
 public class Point2DVector {
 
@@ -44,17 +43,18 @@ public class Point2DVector {
     }
 
     public static void showPoint(Point p) {
-        System.out.printf("(%d, %d)\n", p.x, p.y);
+        System.out.printf("(%.2f, %.2f)\n", p.getX(), p.getY());
     }
 
     public static void swapElements(Point p) {
-        int temp = p.x;
-        p.x = p.y;
-        p.y = temp;
+//        double temp = p.getX();
+//        p.setX(p.getY());
+//        p.setY(temp);
+        p.setLocation(p.getY(), p.getX());
     }
 
     public static Point swapElementSign(Point p) {
-        p = new Point(-p.y, -p.x);
+        p = new Point(-1*p.getX(), -1*p.getY());
         return p;
     }
 }

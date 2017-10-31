@@ -17,7 +17,7 @@ public class QuadraticSolverTest {
         QuadraticSolver qe3 = new QuadraticSolver(2, -4, -3);
         double[] expected3 = {-0.58, 2.58};
         assertArrayEquals(expected3, qe3.getRoots());
-    }
+}
 
     @Test
     void testFindRoots() {
