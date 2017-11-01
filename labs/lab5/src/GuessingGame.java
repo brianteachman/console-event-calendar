@@ -18,22 +18,25 @@ public class GuessingGame {
 
     public static void main(String[] args) {
         alreadyGuessed = new boolean[upperBound];
+        for(int i=0; i < upperBound; i++) {
+            alreadyGuessed[i] = false;
+        }
 
         System.out.print("Pick a number between 1 and "+upperBound+". did you pick? (y/n): ");
         char picked = in.next().charAt(0);
 
         System.out.println("\nNow I'll guess your number.");
 
-        boolean guessed = false;
-        boolean firstGuess = true;
-        while (!guessed) {
-            if (!firstGuess) {
-                System.out.println("Ok, I'll try again.");
-            }
+        boolean gameOver = false;
+        while (!gameOver) {
             int theGuess = guessNumber();
             System.out.print("\nIs your number " + theGuess + "? (y/n): ");
             if (in.next().charAt(0) == 'y'){
-                guessed = true;
+                gameOver = true;
+            }
+            if (guessCount == upperBound) {
+                gameOver = true;
+                System.out.println("Cheating isn't cool!");
             }
         }
     }
@@ -45,6 +48,7 @@ public class GuessingGame {
             guessNumber();
         }
         alreadyGuessed[theGuess] = true;
+        guessCount++;
         return theGuess+1;
     }
 }
