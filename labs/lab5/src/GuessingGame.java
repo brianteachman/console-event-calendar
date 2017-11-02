@@ -2,7 +2,7 @@
  * Lab 05 - Reverse Guessing Game
  *
  * Brian Teachmam
- * 10/31/2017
+ * 11/1/2017
  * CS 140: Whatcom Communtiy College
  * --------------------------------------------------------------------------*/
 
@@ -13,42 +13,67 @@ public class GuessingGame {
     static Scanner in = new Scanner(System.in);
     static Random rgen = new Random();
     static boolean[] alreadyGuessed;
-    static int upperBound = 10;
+    static int upperBound;
     static int guessCount = 0;
 
     public static void main(String[] args) {
-        alreadyGuessed = new boolean[upperBound];
-        for(int i=0; i < upperBound; i++) {
-            alreadyGuessed[i] = false;
-        }
 
-        System.out.print("Pick a number between 1 and "+upperBound+". did you pick? (y/n): ");
-        char picked = in.next().charAt(0);
+        System.out.print("Enter an upper bound for the guess range: ");
+        initGameState(in.nextInt());
+        in.nextLine(); // clear buffer
 
-        System.out.println("\nNow I'll guess your number.");
+        System.out.println("Think of a number between 1 and "+upperBound+" then press ENTER to continue. ");
+        in.nextLine();
 
+        System.out.println("Now I'll guess your number.");
+        char picked;
+
+        boolean nextGuess = true;
         boolean gameOver = false;
         while (!gameOver) {
-            int theGuess = guessNumber();
-            System.out.print("\nIs your number " + theGuess + "? (y/n): ");
-            if (in.next().charAt(0) == 'y'){
-                gameOver = true;
+
+            if (nextGuess) {
+                int theGuess = guessNumber();
+                guessCount++;
+                System.out.print("Is your number " + theGuess + "? (y/n): ");
             }
-            if (guessCount == upperBound) {
+            picked = in.next().charAt(0);
+
+            if (picked == 'y') {
                 gameOver = true;
-                System.out.println("Cheating isn't cool!");
+                nextGuess = false;
+                System.out.println("I got it! After only "+guessCount+(guessCount == 1?" try!":" tries."));
+            }
+            else if (picked == 'n') {
+                if (guessCount == upperBound) {
+                    gameOver = true;
+                    System.out.println("GAME OVER. OK now, cheating isn't cool!");
+                }
+                nextGuess = true;
+            }
+            else {
+                System.out.print("Im sorry, come again? (y/n): ");
+                nextGuess = false;
             }
         }
     }
 
+    private static void initGameState(int size) {
+        upperBound = size;
+        alreadyGuessed = new boolean[upperBound];
+        for(int i=0; i < upperBound; i++) {
+            alreadyGuessed[i] = false;
+        }
+    }
+
     private static int guessNumber() {
-        //returns an integer between 0 (inclusively) and upperBound (exclusively)
+        // rgen.nextInt() returns an integer between 0 (inclusively)
+        // and the upperBound (exclusively)
         int theGuess = rgen.nextInt(upperBound);
-        if (alreadyGuessed[theGuess]) {
-            guessNumber();
+        while (alreadyGuessed[theGuess]) {
+            theGuess = rgen.nextInt(upperBound);
         }
         alreadyGuessed[theGuess] = true;
-        guessCount++;
         return theGuess+1;
     }
 }
