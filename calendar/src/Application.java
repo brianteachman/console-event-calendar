@@ -1,23 +1,52 @@
 /* ----------------------------------------------------------------------------
     Brian Teachman
     CS 140: Whatcom Community College
-    10/11/2017
+    Created: 10/11/2017
+    Updated: 11/17/2017
 
-    A text based calendar:
-
-    Displays a given month in text using java.util.Calendar
+    A text based console calendar, displays a given month in text using
+    java.util.Calendar
  ----------------------------------------------------------------------------*/
 
+import java.io.File;
+import java.util.Random;
 import java.util.Scanner;
 
-public class Application extends PrintCandy {
+public class Application {
 
     private final static int CELL_WIDTH = 5;
     private static int dayCount = 0; // for tracking days in printCalendarDay
 
-    // TODO: refactor these out of global space
-    private static String lastDateIn;
-    private static Integer delimiterIndex; // using Integer for nullability
+    private static class Delimiter {
+        private static String lastDateIn;
+        private static Integer delimiterIndex;
+
+        // Singleton pattern
+        private static Delimiter instance = new Delimiter();
+        private Delimiter() { /* locked */ }
+        public static Delimiter getInstance() {
+            return instance;
+        }
+
+        public static int getIndex(String formattedDate) {
+            if (delimiterIndex == null || !lastDateIn.equals(formattedDate)) { // only iterate through the string once
+                setIndex(formattedDate);
+                lastDateIn = formattedDate;
+            }
+            return delimiterIndex;
+        }
+
+        public static void setIndex(String formattedDate) {
+            delimiterIndex = formattedDate.indexOf("/");
+            if ( ! (delimiterIndex == 1 || delimiterIndex == 2)) { // accounts for '1' or '01' formatted case
+                throw new IllegalArgumentException("Expected the format 'mm/dd', where mm is the month and dd is the day.");
+            }
+        }
+    }
+
+    /*----------------------------------------------------------------------------
+     * Calendar Layout
+     *--------------------------------------------------------------------------*/
 
     public static void displayDate(int month, int day) {
         println("\nMonth: " + month);
@@ -28,10 +57,10 @@ public class Application extends PrintCandy {
     // the month as a text formatted calendar
     public static void drawMonth(BtCalendar c) {
         println("\n"+c.getMonthName());
-        rowHeader(CELL_WIDTH);
+        drawRowHeader("=", CELL_WIDTH);
         for (int i = 0; i < 5; i++) { // 5 weeks
             drawRow(c, i);
-            rowHeader(CELL_WIDTH);
+            drawRowHeader("=", CELL_WIDTH);
         }
         displayDate(c.getMonth(), c.getDay());
         dayCount = 0;
@@ -65,14 +94,28 @@ public class Application extends PrintCandy {
         }
     }
 
+    private static void drawCurrentMonth(BtCalendar c) {
+        if (c == null) {
+            c = new BtCalendar();
+        }
+        drawMonth(c);
+    }
+
     // Print a row divider, some given width
-    private static void rowHeader(int width) {
+    private static void drawRowHeader(String glyph, int width) {
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < width; j++) {
-                print("=");
+                print(glyph);
             }
         }
-        print("=\n");
+        println(glyph);
+    }
+
+    private static void drawHeader(String glyph, int width) {
+        for (int i = 0; i < width; i++) {
+            print(glyph);
+        }
+        println(glyph);
     }
 
     // Let the row height be 1/2 * the row width, unless the cell's width
@@ -107,12 +150,53 @@ public class Application extends PrintCandy {
         }
     }
 
-    private static void drawCurrentMonth(BtCalendar c) {
-        if (c == null) {
-            c = new BtCalendar();
+    /*----------------------------------------------------------------------------
+     * Creative requirement
+     *--------------------------------------------------------------------------*/
+
+    private static void drawASCIIart() {
+        StringBuilder s = new StringBuilder();
+        Scanner in = null;
+        try {
+            in = new Scanner(new File("src/header_graphic.txt"));
+            while(in.hasNextLine()) {
+                s.append(in.nextLine()).append("\n");
+            }
         }
-        drawMonth(c);
+        catch (Exception e) { /* keep quiet */ }
+        println(s.toString());
     }
+
+    private static void drawASCIIBanner() {
+        String content = getDrQuote();
+        println();
+        drawHeader("-", content.length()+20);
+        println(getDrQuote());
+        drawHeader("-", content.length()+20);
+    }
+
+    private static String getDrQuote() {
+        String[] quotes = {
+            "\"Great men are forged in fire. It is the privilege of lesser men to light the flame.\" - The War Doctor",
+            "\"As we learn about each other, so we learn about ourselves.\" - The First Doctor",
+            "\"Logic merely enables one to be wrong with authority.\" - The Second Doctor",
+            "\"I reversed the polarity of the neutron flow.\" - The Third Doctor",
+            "\"Answers are easy. It's asking the right questions which is hard.\" - The Fourth Doctor",
+            "\"Yes. Still, the future lies this way.\" - The Fifth Doctor",
+            "\"What's the use of a good quotation if you can't change it?\" - The Sixth Doctor",
+            "\"All is change, all is movement\" - The Seventh Doctor",
+            "\"I love humans. Always seeing patterns in things that aren’t there.\" - The Eigth Doctor",
+            "\"I love a happy medium!\" - The Ninth Doctor",
+            "\"Allons-y!\" - The Tenth Doctor",
+            "\"I have a thing. It's like a plan, but with more greatness.\" - The Eleventh Doctor",
+            "\"Sometimes the only choices you have are bad ones, but you still have to choose.\" - The Twelfth Doctor"
+        };
+        return quotes[new Random().nextInt(quotes.length)];
+    }
+
+    /*----------------------------------------------------------------------------
+     * UI
+     *--------------------------------------------------------------------------*/
 
     // The selected menu item. ("e", "t", "n", "p", or "q")
     private static char menu(Scanner input) {
@@ -137,9 +221,10 @@ public class Application extends PrintCandy {
     }
 
     private static void setDateFromPrompt(BtCalendar c, Scanner input) {
+        Delimiter delim = Delimiter.getInstance();
         String formattedDate = promptForDate(input); // in-line processing
         try {
-            int delimiterIndex = getDelimiterIndex(formattedDate);
+            int delimiterIndex = delim.getIndex(formattedDate);
             int month = Integer.valueOf(formattedDate.substring(0, delimiterIndex));
             int day = Integer.valueOf(formattedDate.substring(delimiterIndex+1));
             println(month + "/" + day);
@@ -151,50 +236,6 @@ public class Application extends PrintCandy {
         }
     }
 
-    private static int getDelimiterIndex(String formattedDate) {
-        if (delimiterIndex == null || !lastDateIn.equals(formattedDate)) { // only iterate through the string once
-            setDelimiterIndex(formattedDate);
-            lastDateIn = formattedDate;
-        }
-        return delimiterIndex;
-    }
-
-    private static void setDelimiterIndex(String formattedDate) {
-        delimiterIndex = formattedDate.indexOf("/");
-        if ( ! (delimiterIndex == 1 || delimiterIndex == 2)) { // accounts for '1' or '01' formatted case
-            throw new IllegalArgumentException("Expected the format 'mm/dd', where mm is the month and dd is the day.");
-        }
-    }
-
-    private static void stupidASCIIArt() {
-        int rows = 10;
-        int cols = CELL_WIDTH * 7;
-        for (int i=0; i < rows; i++) {
-            for (int j=0; j < cols; j++) {
-                int rchar = (char) (Math.random()*95)+37;
-                if (rchar % 2 == 0) {
-                    print((char) rchar);
-                }
-                else if (rchar % 3 == 0) {
-                    if (i % 3== 0) {
-                        print(" >< ");
-                    }
-                    else {
-                        print(" <> ");
-                    }
-                }
-                else if (rchar % 13 == 0) {
-                    print(" :) ");
-                }
-                else {
-                    print(" ");
-                }
-            }
-            print("\n");
-        }
-        print("\n\n");
-    }
-
     /*----------------------------------------------------------------------
     * Calendar client
     ----------------------------------------------------------------------*/
@@ -203,18 +244,21 @@ public class Application extends PrintCandy {
         BtCalendar delta = new BtCalendar();
         BtCalendar current = null;
 
+        println("\nWelcome to my Doctor who themed calendar.");
+        drawASCIIart();
+
         boolean running = true;
         while (running) {
             switch (menu(input)) {
                 case 'e':
                     setDateFromPrompt(delta, input);
-                    // TODO: add ASCII art
+                    drawASCIIBanner();
                     drawMonth(delta);
                     drawCurrentMonth(current);
                     break;
 
                 case 't':
-                    // TODO: add ASCII art
+                    drawASCIIBanner();
                     drawCurrentMonth(current);
                     delta.setDateSetFlag(true);
                     break;
@@ -222,7 +266,7 @@ public class Application extends PrintCandy {
                 case 'n':
                     if (delta.isDateSet()) {
                         delta.nextMonth();
-                        // TODO: add ASCII art
+                        drawASCIIBanner();
                         drawMonth(delta);
                         drawCurrentMonth(current);
                     }
@@ -234,7 +278,7 @@ public class Application extends PrintCandy {
                 case 'p':
                     if (delta.isDateSet()) {
                         delta.previousMonth();
-                        // TODO: add ASCII art
+                        drawASCIIBanner();
                         drawMonth(delta);
                         drawCurrentMonth(current);
                     }
@@ -253,5 +297,29 @@ public class Application extends PrintCandy {
                     break;
             }
         }
+    }
+
+    /*----------------------------------------------------------------------------
+     * Print Helpers
+     *--------------------------------------------------------------------------*/
+
+    private static void print(String thing) {
+        System.out.print(thing);
+    }
+
+    private static void println(String thing) {
+        System.out.println(thing);
+    }
+
+    private static void print(int num) {
+        System.out.print(num);
+    }
+
+    private static void println(int num) {
+        System.out.println(num);
+    }
+
+    private static void println() {
+        System.out.println();
     }
 }

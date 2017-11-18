@@ -1,8 +1,19 @@
+/* ----------------------------------------------------------------------------
+    Brian Teachman
+    CS 140: Whatcom Community College
+    Created: 10/11/2017
+    Updated: 11/17/2017
+
+    BtCalendar Test Cases
+ ----------------------------------------------------------------------------*/
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
 class BtCalendarTests {
+
+    // TODO: 1.
 
     @Test
     void testConstructCalendarWithNoParams() {

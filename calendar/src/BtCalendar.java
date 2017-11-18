@@ -1,9 +1,10 @@
 /* ----------------------------------------------------------------------------
     Brian Teachman
     CS 140: Whatcom Community College
-    10/11/2017
+    Created: 10/11/2017
+    Updated: 11/17/2017
 
-    Java 8 Calendar Wrapper: console calendar helper class.
+    Calendar Wrapper: text based console calendar helper class.
  ----------------------------------------------------------------------------*/
 
 import java.util.Calendar;
@@ -14,6 +15,7 @@ public class BtCalendar {
     public int[] monthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     private String[] monthName = { "January", "February", "March", "April", "May", "June", "July",
             "August", "September", "October", "November", "December" };
+
     public boolean dateIsSet;
     private Calendar cal;
 
@@ -31,7 +33,6 @@ public class BtCalendar {
     public BtCalendar() {
         this.cal = startNewCalendar();
         dateIsSet = false; // technically it is set, however, not explicitly
-//        dateIsSet = true; // however, not explicitly
     }
 
     // Return Calendar object representing today if month and day are null
