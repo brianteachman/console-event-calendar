@@ -11,8 +11,9 @@
 import java.io.File;
 import java.util.*;
 
-public class Application {
+public class TextCalendar {
 
+    private final static String PATH_FROM_ROOT = "src/";
     private final static int CELL_WIDTH = 5;
     private static int dayCount = 0; // for tracking days in printCalendarDay
 
@@ -47,7 +48,7 @@ public class Application {
         }
     }
 
-    private static class BtCalendar {
+    public static class BtCalendar {
 
         public int[] monthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
         private String[] monthName = { "January", "February", "March", "April", "May", "June", "July",
@@ -278,7 +279,7 @@ public class Application {
         StringBuilder s = new StringBuilder();
         Scanner in = null;
         try {
-            in = new Scanner(new File("src/header_graphic.txt"));
+            in = new Scanner(new File(PATH_FROM_ROOT + "header_graphic.txt"));
             while(in.hasNextLine()) {
                 s.append(in.nextLine()).append("\n");
             }
