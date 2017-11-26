@@ -4,7 +4,7 @@ import java.util.Scanner;
 public class CalController {
 
     /*----------------------------------------------------------------------------
-     * UI
+     * UI: Prompts
      *--------------------------------------------------------------------------*/
 
     // The selected menu item. ("e", "t", "n", "p", or "q")
@@ -33,59 +33,16 @@ public class CalController {
     }
 
     private static void setDateFromPrompt(CalModel c, Scanner input) {
-        Delimiter delim = Delimiter.getInstance();
         String formattedDate = promptForDate(input); // in-line processing
         try {
-            int delimiterIndex = delim.getIndex(formattedDate);
-            int month = monthFromDate(formattedDate, delimiterIndex);
-            int day = dayFromDate(formattedDate, delimiterIndex);
+            int month = DateDelimiter.monthFromDate(formattedDate);
+            int day = DateDelimiter.dayFromDate(formattedDate);
             c.setDate(month, day, 2017);
         }
-        catch (IllegalArgumentException e) {
+        catch (Exception e) {
             System.out.println(e.getMessage());
             setDateFromPrompt(c, input); // fail gracefully (recursive reprompt)
         }
-    }
-
-    // Given a date as a String, extract an integer value for the day and return it.
-    private static int dayFromDate(String formatedDate, int delimiter) throws IllegalArgumentException {
-        String dd = formatedDate.substring(delimiter+1);
-        return validateAndReturnInt(dd, 31, "Days");
-    }
-
-    // Given a date as a String, extract an integer value for the month and return it.
-    private static int monthFromDate(String formatedDate, int delimiter) throws IllegalArgumentException {
-        String mm = formatedDate.substring(0, delimiter);
-        return validateAndReturnInt(mm, 12, "Months");
-    }
-
-    // Check date segments for valid, correctly formatted input
-    private static int validateAndReturnInt(String dateSegment, int upperBound, String segmentName)
-            throws IllegalArgumentException {
-        dateSegment = removeLeadingZero(dateSegment);
-        ArrayList<String> validSegments = getValidList(upperBound);
-        if ( ! validSegments.contains(dateSegment)) { // check input is in valid month range
-            throw new IllegalArgumentException(String.format("\n%s range from 1 to %d. %s given.\n",
-                    segmentName, upperBound, dateSegment));
-        }
-        return Integer.parseInt(dateSegment);
-    }
-
-    // Build a list of ascii integers representing months and days (for easy range checking)
-    private static ArrayList<String> getValidList(int upperBound) {
-        ArrayList<String> list = new ArrayList<String>();
-        for (int i=1; i<=upperBound; i++) {
-            list.add("".valueOf(i));
-        }
-        return list;
-    }
-
-    // If string segment starts with a zero, remove it
-    private static String removeLeadingZero(String dateSegment) {
-        if (dateSegment.startsWith("0")) {
-            dateSegment = dateSegment.substring(1);
-        }
-        return dateSegment;
     }
 
     /*----------------------------------------------------------------------
@@ -100,9 +57,7 @@ public class CalController {
         CalModel current = null;
 
         StringBuilder header = new StringBuilder();
-        header.append(eol)
-              .append("Welcome to my Doctor who themed calendar.")
-              .append(eol);
+        addLine(header, "Welcome to my Doctor who themed calendar.");
         ArtModel.drawHeaderArt(header);
         stream(header.toString());
 
@@ -129,11 +84,8 @@ public class CalController {
                         ArtModel.drawBanner(output);
                         CalView.drawMonth(delta, output);
                         CalView.drawCurrentMonth(current, output);
-                    }
-                    else {
-                        output.append(eol)
-                              .append("You need to have a calendar displayed first.")
-                              .append(eol);
+                    } else {
+                        addLine(output, "You need to have a calendar displayed first.");
                     }
                     break;
 
@@ -143,32 +95,32 @@ public class CalController {
                         ArtModel.drawBanner(output);
                         CalView.drawMonth(delta, output);
                         CalView.drawCurrentMonth(current, output);
-                    }
-                    else {
-                        output.append(eol)
-                              .append("You need to have a calendar displayed first.")
-                              .append(eol);
+                    } else {
+                        addLine(output, "You need to have a calendar displayed first.");
                     }
                     break;
 
                 case 'q':
                     running = false;
-                    output.append(eol)
-                          .append("That's one way to do it, good day.")
-                          .append(eol);
+                    addLine(output, "That's one way to do it, good day.");
                     break;
 
                 default:
-                    output.append("Please enter a valid command.")
-                          .append(eol);
+                    addLine(output, "Please enter a valid command.");
                     break;
             }
 
-            // display output to StdOut
+            // pass output to StdOut
             stream(output.toString());
         }
     }
 
+    // drop a line, add text, drop a line
+    private static void addLine(StringBuilder s, String text) {
+        s.append(CalView.EOL).append(text).append(CalView.EOL);
+    }
+
+    // print to StdOut
     private static void stream(String thing) {
         System.out.print(thing);
     }
