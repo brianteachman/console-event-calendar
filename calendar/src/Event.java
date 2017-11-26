@@ -12,14 +12,4 @@ public class Event {
     // b. Add loaded events from file into the events array by date.
     // c. Events are processed in task 1.c.
     // Extra credit: open a given filename and handle errors on fail.
-
-    // TASK 3
-    // File Printing: when "fp" is entered, write calendar of given date to a file.
-    // a. Prompt user for month to print.
-    // b. Prompt user for name of file to write.
-    // c. Write calendar and events to said file.
-    // d. Close pointer to file.
-
-    // Extra credit:
-    // Support adding a commands to an allowed commands list and enforcing functionality.
 }

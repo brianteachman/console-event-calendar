@@ -1,6 +1,6 @@
-public class CalView {
+public class ViewModel {
 
-    private final static int CELL_WIDTH = 5;
+    private final static int CELL_WIDTH = 10;
     public final static String EOL = "\n";
     private static int dayCount = 0; // for tracking days in printCalendarDay
 
@@ -10,7 +10,7 @@ public class CalView {
 
     public static void displayDate(StringBuilder s, int month, int day) {
         s.append(EOL).append("Month: ").append(month)
-                .append(EOL).append("Day: ").append(day).append(EOL);
+         .append(EOL).append("Day: ").append(day).append(EOL);
     }
 
     public static void drawHeader(StringBuilder s, String glyph, int width) {
@@ -22,7 +22,7 @@ public class CalView {
 
     // Accepts an integer representing the month and displays
     // the month as a text formatted calendar
-    public static void drawMonth(CalModel c, StringBuilder s) {
+    public static void drawMonth(CalendarModel c, StringBuilder s) {
         s.append("\n").append(c.getMonthName()).append("\n");
         drawRowHeader(s, "=", CELL_WIDTH);
         for (int i = 0; i < 5; i++) { // 5 weeks
@@ -33,15 +33,15 @@ public class CalView {
         dayCount = 0;
     }
 
-    public static void drawCurrentMonth(CalModel c, StringBuilder s) {
+    public static void drawCurrentMonth(CalendarModel c, StringBuilder s) {
         if (c == null) {
-            c = new CalModel();
+            c = new CalendarModel();
         }
         drawMonth(c, s);
     }
 
     // Print one week of the calendar (one row) to the stream
-    private static void drawRow(CalModel c, StringBuilder s, int row) {
+    private static void drawRow(CalendarModel c, StringBuilder s, int row) {
         for (int rowHeight = 0; rowHeight < cellHeight(); rowHeight++) { // cell height number of rows
             s.append("|"); // start row
             for (int cellNumber = 0; cellNumber < 7; cellNumber++) { // 7 cells for 7 days
@@ -90,7 +90,7 @@ public class CalView {
     }
 
     // Print cell data to stream
-    private static void printCalendarDay(CalModel c, StringBuilder s, int rowNumber, int cellNumber) {
+    private static void printCalendarDay(CalendarModel c, StringBuilder s, int rowNumber, int cellNumber) {
         int startWeekDay = c.getFirstWeekdayOfMonth();
         int daysInMonth = c.getLastDayOfMonth();
 

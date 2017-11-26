@@ -1,7 +1,7 @@
 import java.util.Calendar;
 import java.util.TimeZone;
 
-public class CalModel {
+public class CalendarModel {
     public int[] monthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     private String[] monthName = { "January", "February", "March", "April", "May", "June", "July",
             "August", "September", "October", "November", "December" };
@@ -14,13 +14,13 @@ public class CalModel {
          *--------------------------------------------------------------------------*/
 
     // This calendar instantiated with given date
-    public CalModel(int month, int day) {
+    public CalendarModel(int month, int day) {
         this.cal = startNewCalendar(month, day);
         dateIsSet = true; // explicitly set date
     }
 
     // This calendar instantiated with todays date
-    public CalModel() {
+    public CalendarModel() {
         this.cal = startNewCalendar();
         dateIsSet = false; // technically it is set, however, not explicitly
     }

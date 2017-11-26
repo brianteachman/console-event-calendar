@@ -14,7 +14,7 @@ public class ArtModel {
         try {
             in = new Scanner(new File(PATH_FROM_ROOT + "header_graphic.txt"));
             while(in.hasNextLine()) {
-                s.append(in.nextLine()).append(CalView.EOL);
+                s.append(in.nextLine()).append(ViewModel.EOL);
             }
         }
         catch (Exception e) { /* keep quiet */ }
@@ -22,10 +22,10 @@ public class ArtModel {
 
     public static void drawBanner(StringBuilder s) {
         String content = getDrQuote();
-        s.append(CalView.EOL);
-        CalView.drawHeader(s, "-", content.length());
-        s.append(content).append(CalView.EOL);
-        CalView.drawHeader(s, "-", content.length());
+        s.append(ViewModel.EOL);
+        ViewModel.drawHeader(s, "-", content.length());
+        s.append(content).append(ViewModel.EOL);
+        ViewModel.drawHeader(s, "-", content.length());
     }
 
     private static String getDrQuote() {
