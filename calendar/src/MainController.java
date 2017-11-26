@@ -1,3 +1,10 @@
+/*-----------------------------------------------------------------------------
+* Author: Brian Teachman
+* Date:   11/26/2017
+*
+* Application controller and calendar client
+*----------------------------------------------------------------------------*/
+
 import java.io.File;
 import java.io.PrintStream;
 import java.util.HashMap;
@@ -9,6 +16,7 @@ public class MainController {
 
     private static HashMap<String, CommandStrategy> buildWhitelist() {
         HashMap<String, CommandStrategy> commands = new HashMap<String, CommandStrategy>();
+
         // available actions
         commands.put("e", new EnterDate());
         commands.put("t", new TodaysDate());

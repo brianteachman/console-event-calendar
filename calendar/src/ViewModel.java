@@ -1,3 +1,10 @@
+/*-----------------------------------------------------------------------------
+* Author: Brian Teachman
+* Date:   11/26/2017
+*
+* View model, formats calendar for text layout.
+*----------------------------------------------------------------------------*/
+
 public class ViewModel {
 
     private final static int CELL_WIDTH = 10;

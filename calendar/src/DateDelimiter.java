@@ -1,3 +1,10 @@
+/*-----------------------------------------------------------------------------
+* Author: Brian Teachman
+* Date:   11/26/2017
+*
+* Static month and day text parsing class (formatted: MM/DD or M/DD)
+*----------------------------------------------------------------------------*/
+
 import java.util.ArrayList;
 
 public class DateDelimiter {

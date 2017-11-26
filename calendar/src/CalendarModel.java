@@ -1,3 +1,10 @@
+/*-----------------------------------------------------------------------------
+* Author: Brian Teachman
+* Date:   11/26/2017
+*
+* java.util.Calendar Wrapper
+*----------------------------------------------------------------------------*/
+
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -9,9 +16,9 @@ public class CalendarModel {
     public boolean dateIsSet;
     private Calendar cal;
 
-        /*----------------------------------------------------------------------------
-         * Construction
-         *--------------------------------------------------------------------------*/
+    /*----------------------------------------------------------------------------
+     * Construction
+     *--------------------------------------------------------------------------*/
 
     // This calendar instantiated with given date
     public CalendarModel(int month, int day) {
@@ -36,9 +43,9 @@ public class CalendarModel {
         return Calendar.getInstance(TimeZone.getTimeZone("America/Vancouver"));
     }
 
-        /*----------------------------------------------------------------------------
-         * Calendar Accessors
-         *--------------------------------------------------------------------------*/
+    /*----------------------------------------------------------------------------
+     * Calendar Accessors
+     *--------------------------------------------------------------------------*/
 
     public int getDay() {
         return this.cal.get(Calendar.DAY_OF_MONTH);
@@ -75,9 +82,9 @@ public class CalendarModel {
         return day == this.getDay();
     }
 
-        /*----------------------------------------------------------------------------
-         * Calendar Mutators
-         *--------------------------------------------------------------------------*/
+    /*----------------------------------------------------------------------------
+     * Calendar Mutators
+     *--------------------------------------------------------------------------*/
 
     // set the date of the invariant java.util.Calendar
     public void setDate(int month, int day, int year) {

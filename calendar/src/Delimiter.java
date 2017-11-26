@@ -1,3 +1,10 @@
+/*-----------------------------------------------------------------------------
+* Author: Brian Teachman
+* Date:   11/26/2017
+*
+* Singleton delimiter class for parsing formatted date text.
+*----------------------------------------------------------------------------*/
+
 public class Delimiter {
     private static String lastDateIn;
     private static Integer delimiterIndex;

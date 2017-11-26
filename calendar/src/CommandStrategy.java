@@ -1,5 +1,8 @@
 /*-----------------------------------------------------------------------------
-* Strategy pattern for processing UI commands
+* Author: Brian Teachman
+* Date:   11/26/2017
+*
+* Strategy pattern for processing console UI commands
 *----------------------------------------------------------------------------*/
 
 import java.util.Scanner;
