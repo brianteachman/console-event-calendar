@@ -4,6 +4,7 @@
 *
 * View model, formats calendar for text layout.
 *----------------------------------------------------------------------------*/
+package model;
 
 public class ViewModel {
 

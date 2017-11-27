@@ -1,8 +1,16 @@
+/*-----------------------------------------------------------------------------
+* Author: Brian Teachman
+* Date:   11/26/2017
+*
+* Doctor Who Calendar Theme
+*----------------------------------------------------------------------------*/
+package model;
+
 import java.io.File;
 import java.util.Random;
 import java.util.Scanner;
 
-public class ArtModel {
+public class Theme {
     private static final String PATH_FROM_ROOT = "src/";
 
     /*----------------------------------------------------------------------------

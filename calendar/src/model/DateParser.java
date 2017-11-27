@@ -4,14 +4,17 @@
 *
 * Static month and day text parsing class (formatted: MM/DD or M/DD)
 *----------------------------------------------------------------------------*/
+package model;
+
+import model.Delimiter;
 
 import java.util.ArrayList;
 
-public class DateDelimiter {
+public class DateParser {
 
     private static Delimiter delim;
 
-    public DateDelimiter() {
+    public DateParser() {
         delim = Delimiter.getInstance();
     }
 

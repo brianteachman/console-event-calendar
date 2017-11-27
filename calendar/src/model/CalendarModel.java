@@ -4,12 +4,13 @@
 *
 * java.util.Calendar Wrapper
 *----------------------------------------------------------------------------*/
+package model;
 
 import java.util.Calendar;
 import java.util.TimeZone;
 
 public class CalendarModel {
-    public int[] monthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    private int[] monthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     private String[] monthName = { "January", "February", "March", "April", "May", "June", "July",
             "August", "September", "October", "November", "December" };
 
@@ -57,6 +58,14 @@ public class CalendarModel {
 
     public String getMonthName() {
         return this.monthName[this.cal.get(Calendar.MONTH)];
+    }
+
+    public int[] getMonthDays() {
+        return monthDays;
+    }
+
+    public String[] getMonthNames() {
+        return monthName;
     }
 
     public int getYear() {

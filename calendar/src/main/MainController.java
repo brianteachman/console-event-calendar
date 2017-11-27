@@ -4,6 +4,9 @@
 *
 * Application controller and calendar client
 *----------------------------------------------------------------------------*/
+package main;
+
+import model.*;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -14,9 +17,12 @@ public class MainController {
 
     private static String[][] events; // global events array
 
+    /*----------------------------------------------------------------------
+    * Available client actions
+    ----------------------------------------------------------------------*/
+
     private static HashMap<String, CommandStrategy> buildWhitelist() {
         HashMap<String, CommandStrategy> commands = new HashMap<String, CommandStrategy>();
-
         // available actions
         commands.put("e", new EnterDate());
         commands.put("t", new TodaysDate());
@@ -28,13 +34,19 @@ public class MainController {
         return commands;
     }
 
+    private static void addCommandToWhitelist(HashMap<String, CommandStrategy> cmds,
+                                              String key, CommandStrategy cmd) {
+        cmds.put(key, cmd);
+    }
+
     /*----------------------------------------------------------------------
     * Calendar client
     ----------------------------------------------------------------------*/
+
     public static void main(String[] args) {
 
         events = new String[12][31];
-        //TODO: load events from file on init
+        Events.loadEventFile(events,"src/calendarEvents.txt");
 
         // create editable "whitelist" of allow commands
         HashMap<String, CommandStrategy> commands = buildWhitelist();
@@ -46,7 +58,7 @@ public class MainController {
 
         StringBuilder header = new StringBuilder();
         addLine(header, "Welcome to my Doctor who themed calendar.");
-        ArtModel.drawHeaderArt(header);
+        Theme.drawHeaderArt(header);
         stream(header.toString());
 
         while (SwitchState.isRunning()) {
@@ -92,9 +104,9 @@ public class MainController {
         return null;
     }
 
-    // Returns a Event string in the format "mm/dd event_name"
+    // Returns a model.Event string in the format "mm/dd event_name"
     private static String promptForEvent(Scanner prompt) {
-        stream("Enter new Event in the format \"MM/DD event_title\": ");
+        stream("Enter new model.Event in the format \"MM/DD event_title\": ");
         return prompt.nextLine(); // in-line processing
     }
 
@@ -107,8 +119,8 @@ public class MainController {
     private static void setDateFromPrompt(CalendarModel c, Scanner prompt) {
         String formattedDate = promptForDate(prompt); // in-line processing
         try {
-            int month = DateDelimiter.monthFromDate(formattedDate);
-            int day = DateDelimiter.dayFromDate(formattedDate);
+            int month = DateParser.monthFromDate(formattedDate);
+            int day = DateParser.dayFromDate(formattedDate);
             c.setDate(month, day, 2017);
         }
         catch (Exception e) {
@@ -125,7 +137,7 @@ public class MainController {
         public void execute(Scanner in, StringBuilder out,
                             CalendarModel delta, CalendarModel current) {
             setDateFromPrompt(delta, in);
-            ArtModel.drawBanner(out);
+            Theme.drawBanner(out);
             ViewModel.drawMonth(delta, out);
             ViewModel.drawCurrentMonth(current, out);
         }
@@ -134,7 +146,7 @@ public class MainController {
     private static class TodaysDate implements CommandStrategy {
         public void execute(Scanner in, StringBuilder out,
                             CalendarModel delta, CalendarModel current) {
-            ArtModel.drawBanner(out);
+            Theme.drawBanner(out);
             ViewModel.drawCurrentMonth(current, out);
             delta.setDateSetFlag(true);
         }
@@ -145,7 +157,7 @@ public class MainController {
                             CalendarModel delta, CalendarModel current) {
             if (delta.isDateSet()) {
                 delta.nextMonth();
-                ArtModel.drawBanner(out);
+                Theme.drawBanner(out);
                 ViewModel.drawMonth(delta, out);
                 ViewModel.drawCurrentMonth(current, out);
             } else {
@@ -159,7 +171,7 @@ public class MainController {
                             CalendarModel delta, CalendarModel current) {
             if (delta.isDateSet()) {
                 delta.previousMonth();
-                ArtModel.drawBanner(out);
+                Theme.drawBanner(out);
                 ViewModel.drawMonth(delta, out);
                 ViewModel.drawCurrentMonth(current, out);
             } else {
@@ -172,19 +184,16 @@ public class MainController {
         public void execute(Scanner in, StringBuilder out,
                             CalendarModel delta, CalendarModel current) {
             // TASK 1
-            // Event Planning: when "ev" is entered, start a new event planning action:
+            // model.Event Planning: when "ev" is entered, start a new event planning action:
 
             // a. Prompt user for an event in the form of "MM/DD event_title".
             String ev = promptForEvent(in);
 
             // b. Parse and store event in global array, events[12][31].
-            String[] part = ev.split(" ");
-            int month = DateDelimiter.monthFromDate(part[0]);
-            int day = DateDelimiter.dayFromDate(part[0]);
-            events[month][day] = part[1];
+            Events.setEvent(events, ev);
 
             // c. Display events from array in correct cell (day) of displayed calendar.
-            out.append("Event: ").append(events[month][day]).append(ViewModel.EOL);
+//            out.append("model.Event: ").append(events[month][day]).append(ViewModel.EOL);
         }
     }
 
@@ -205,23 +214,23 @@ public class MainController {
 
             // c. Write calendar and events to said file.
             StringBuilder s = new StringBuilder();
+            delta.setDate(month, 1, 2017);
             try {
-                File fp = new File(filename);
-                PrintStream ps = new PrintStream(fp);
-                delta.setDate(month, 1, 2017);
-                ArtModel.drawBanner(s);
+                PrintStream file = new PrintStream(new File(filename));
+                //-- PRINT >>------------------------------------------
+                Theme.drawBanner(s);
                 ViewModel.drawMonth(delta, s);
-                ps.println(s.toString());
+                file.println(s.toString());
+                //--<< END --------------------------------------------
 
                 // d. Close pointer to file.
-                fp = null; //TODO: check this
-                ps = null;
+                file = null; //TODO: check this
             }
             catch (Exception e) {
 //                stream("Shitty");
             }
 
-            out.append("File printed to ").append(filename).append(ViewModel.EOL);
+            addLine(out, "Calendar and events for month "+month+" was printed to "+filename);
         }
     }
 

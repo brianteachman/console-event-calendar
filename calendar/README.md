@@ -1,5 +1,5 @@
 ## TASK 1
-**Event Planning**: when "`ev`" is entered, start a new event planning action:
+**model.Events Planning**: when "`ev`" is entered, start a new event planning action:
 
 1. Prompt user for an event in the form of `"MM/DD event_title"`.
 2. Parse and store event in global array, `events[12][31]`.
