@@ -4,7 +4,7 @@
 *
 * Strategy pattern for processing console UI commands
 *----------------------------------------------------------------------------*/
-package main;
+package model;
 
 import model.CalendarModel;
 

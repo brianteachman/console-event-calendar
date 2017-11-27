@@ -4,8 +4,8 @@
 *
 * Application controller and calendar client
 *----------------------------------------------------------------------------*/
-package main;
 
+import exceptions.InvalidDateInputException;
 import model.*;
 
 import java.io.File;
@@ -187,10 +187,17 @@ public class MainController {
             // model.Event Planning: when "ev" is entered, start a new event planning action:
 
             // a. Prompt user for an event in the form of "MM/DD event_title".
-            String ev = promptForEvent(in);
+            String ev = null;
+            try {
+                ev = promptForEvent(in);
 
-            // b. Parse and store event in global array, events[12][31].
-            Events.setEvent(events, ev);
+                // b. Parse and store event in global array, events[12][31].
+                Events.setEvent(events, ev);
+            }
+            catch (InvalidDateInputException e) {
+                stream(e.getMessage());
+                ev = promptForEvent(in);
+            }
 
             // c. Display events from array in correct cell (day) of displayed calendar.
 //            out.append("model.Event: ").append(events[month][day]).append(ViewModel.EOL);

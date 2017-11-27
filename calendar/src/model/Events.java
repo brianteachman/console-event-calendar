@@ -1,4 +1,12 @@
+/*---------------------------------------------------------------------
+ * Author: Brian Teachman
+ * Date: 11/27/2017
+ *
+ * License: http://www.wtfpl.net/txt/copying/
+ *-------------------------------------------------------------------*/
 package model;
+
+import exceptions.InvalidDateInputException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,7 +18,7 @@ public class Events {
     // model.Event Planning: when "ev" is entered, start a new event planning action:
     // a. Prompt user for an event in the form of "MM/DD event_title".
     // b. Parse and store event in global array, events[12][31].
-    public static void setEvent(String[][] events, String event) {
+    public static void setEvent(String[][] events, String event) throws InvalidDateInputException {
         String[] part = event.split("\\s+"); // any whitespace
         int month = DateParser.monthFromDate(part[0]);
         int day = DateParser.dayFromDate(part[0]);
