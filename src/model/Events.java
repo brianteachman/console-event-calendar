@@ -20,16 +20,17 @@ import java.util.Scanner;
 public class Events {
 
     // TASK 1
-
     // model.Event Planning: when "ev" is entered, start a new event planning action:
     // a. Prompt user for an event in the form of "MM/DD event_title".
     // b. Parse and store event in global array, events[12][31].
     public static void setEvent(String[][] events, String event) throws InvalidDateInputException {
         String[] part = event.split("\\s+"); // any whitespace
-        int month = DateParser.monthFromDate(part[0]);
-        int day = DateParser.dayFromDate(part[0]);
-//        events[month-1][day-1] = part[1];
-        events[month][day] = part[1];
+        if (part.length > 1) {
+            int month = DateParser.monthFromDate(part[0]);
+            int day = DateParser.dayFromDate(part[0]);
+//            events[month-1][day-1] = part[1];
+            events[month][day] = part[1];
+        }
     }
 
     // c. Display events from array in correct cell (day) of displayed calendar.
@@ -50,9 +51,7 @@ public class Events {
                 setEvent(events, file.nextLine());
             }
         }
-        catch (FileNotFoundException e) {
-            //
-        }
+        catch (FileNotFoundException e) {}
     }
 
     public static String parse(String str) {

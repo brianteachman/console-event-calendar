@@ -17,31 +17,17 @@ public class AppController {
     // Whitelist of controller actions
     private HashMap<String, CommandStrategy> commands;
 
-//    private Scanner prompt; // user prompt
-
     public AppController() {
 
         commands = new HashMap<String, CommandStrategy>();
 
         // Working calendars
         deltaMonth = new CalendarModel();
-        thisMonth = null;
+        thisMonth = new CalendarModel();
     }
 
     /*----------------------------------------------------------------------
-    * Controller action setter/getter
-    ----------------------------------------------------------------------*/
-
-    public void addCommand(String key, CommandStrategy cmd) {
-        commands.put(key, cmd);
-    }
-
-    public CommandStrategy getCommand(String key) {
-        return commands.get(key);
-    }
-
-    /*----------------------------------------------------------------------
-    * Run given controller action
+    * Run given controller action using a search table of strategy actions
     ----------------------------------------------------------------------*/
 
     public void run(String action, StringBuilder output) {
@@ -57,13 +43,23 @@ public class AppController {
     }
 
     /*----------------------------------------------------------------------
+    * Controller action setter/getter
+    ----------------------------------------------------------------------*/
+
+    public void addCommand(String key, CommandStrategy cmd) {
+        commands.put(key, cmd);
+    }
+
+    public CommandStrategy getCommand(String key) {
+        return commands.get(key);
+    }
+
+    /*----------------------------------------------------------------------
     * Manage events
     ----------------------------------------------------------------------*/
 
-    public String[][] initEvents() {
-        String[][] events = new String[13][32];
+    public void loadEvents(String[][] events) {
         Events.loadEventFile(events,"src/calendarEvents.txt");
-        return events;
     }
 
     public void addEvent(String[][] events, String event) {

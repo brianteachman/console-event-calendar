@@ -29,7 +29,8 @@ public class Main {
         /*------------------------------------------------------------------
         * Initialize events array
         ------------------------------------------------------------------*/
-        events = app.initEvents();
+        events = new String[13][32];
+        app.loadEvents(events);
 
         /*------------------------------------------------------------------
         * Add header to output
@@ -89,29 +90,24 @@ public class Main {
         return prompt.nextLine(); // in-line processing
     }
 
-    private static void setDateFromPrompt(CalendarModel c, Scanner prompt) {
-        String formattedDate = promptForDate(prompt); // in-line processing
-        try {
-            int month = DateParser.monthFromDate(formattedDate);
-            int day = DateParser.dayFromDate(formattedDate);
-            c.setDate(month, day, 2017);
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-            setDateFromPrompt(c, prompt); // fail gracefully (recursive reprompt)
-        }
-    }
-
     /*----------------------------------------------------------------------------
      * Command Strategies (Controller Actions)
      *--------------------------------------------------------------------------*/
 
     private static class EnterDate implements CommandStrategy {
         public void execute(AppController app, Scanner in, StringBuilder out) {
-            setDateFromPrompt(app.deltaMonth, in);
-            Theme.drawBanner(out);
-            ViewModel.drawMonth(app.deltaMonth, out);
-            ViewModel.drawCurrentMonth(app.thisMonth, out);
+//            setDateFromPrompt(app.deltaMonth, in);
+            String formattedDate = promptForDate(in); // in-line processing
+            try {
+                int month = DateParser.monthFromDate(formattedDate);
+                int day = DateParser.dayFromDate(formattedDate);
+                app.deltaMonth.setDate(month, day, 2017);
+            }
+            catch (Exception e) {
+                stream(e.getMessage() + ViewModel.EOL);
+                app.getCommand("e").execute(app, in, out);
+            }
+            drawCalendars(app, out);
         }
     }
 
@@ -119,7 +115,7 @@ public class Main {
         public void execute(AppController app, Scanner in, StringBuilder out) {
             Theme.drawBanner(out);
             ViewModel.drawCurrentMonth(app.thisMonth, out);
-//            Events.getEventsForMonth(events, app.thisMonth.getMonth(), out);
+            listEventsForMonth(app.thisMonth, out);
             app.deltaMonth.setDateSetFlag(true);
         }
     }
@@ -128,9 +124,7 @@ public class Main {
         public void execute(AppController app, Scanner in, StringBuilder out) {
             if (app.deltaMonth.isDateSet()) {
                 app.deltaMonth.nextMonth();
-                Theme.drawBanner(out);
-                ViewModel.drawMonth(app.deltaMonth, out);
-                ViewModel.drawCurrentMonth(app.thisMonth, out);
+                drawCalendars(app, out);
             } else {
                 addLine(out, "You need to have a calendar displayed first.");
             }
@@ -139,11 +133,9 @@ public class Main {
 
     private static class PreviousMonth implements CommandStrategy {
         public void execute(AppController app, Scanner in, StringBuilder out) {
-            if (app.deltaMonth.isDateSet()) {
+            if (app.deltaMonth.isDateSet()) {//TODO: smells bad
                 app.deltaMonth.previousMonth();
-                Theme.drawBanner(out);
-                ViewModel.drawMonth(app.deltaMonth, out);
-                ViewModel.drawCurrentMonth(app.thisMonth, out);
+                drawCalendars(app, out);
             } else {
                 addLine(out, "You need to have a calendar displayed first.");
             }
@@ -152,8 +144,8 @@ public class Main {
 
     private static class EventPlanning implements CommandStrategy {
         public void execute(AppController app, Scanner in, StringBuilder out) {
-            // TASK 1
-            // model.Event Planning: when "ev" is entered, start a new event planning action:
+            // TASK 1 - Event Planning:
+            // when "ev" is entered, start a new event planning action:
 
             // a. Prompt user for an event in the form of "MM/DD event_title".
             String ev = null;
@@ -162,14 +154,14 @@ public class Main {
 
                 // b. Parse and store event in global array, events[12][31].
                 app.addEvent(events, ev);
+
+                // c. Display events from array in correct cell (day) of displayed calendar.
+                addLine(out, "Added event: " + ev);
             }
             catch (InvalidDateInputException e) {
                 stream(e.getMessage() + ViewModel.EOL);
                 app.getCommand("ev").execute(app, in, out);
             }
-
-            // c. Display events from array in correct cell (day) of displayed calendar.
-//            out.append("model.Event: ").append(events[month][day]).append(ViewModel.EOL);
         }
     }
 
@@ -221,7 +213,7 @@ public class Main {
     }
 
     /*----------------------------------------------------------------------------
-     * Helpers
+     * View Helpers
      *--------------------------------------------------------------------------*/
 
     // drop a line, add text, drop a line
@@ -232,5 +224,22 @@ public class Main {
     // print to StdOut
     private static void stream(String thing) {
         System.out.print(thing);
+    }
+
+    private static void listEventsForMonth(CalendarModel cal, StringBuilder out) {
+        // add events for the month
+        addLine(out, "Events: ");
+        ViewModel.drawHeader(out, "-", 25);
+        Events.getEventsForMonth(events, cal.getMonth(), out);
+    }
+
+    private static void drawCalendars(AppController app, StringBuilder out) {
+        Theme.drawBanner(out);
+        //
+        ViewModel.drawMonth(app.deltaMonth, out);
+        listEventsForMonth(app.deltaMonth, out);
+        //
+        ViewModel.drawCurrentMonth(app.thisMonth, out);
+        listEventsForMonth(app.thisMonth, out);
     }
 }
