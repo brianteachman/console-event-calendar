@@ -11,5 +11,6 @@ import model.CalendarModel;
 import java.util.Scanner;
 
 public interface CommandStrategy {
-    public void execute(Scanner in, StringBuilder out, CalendarModel a, CalendarModel b);
+//    public void execute(Scanner in, StringBuilder out, CalendarModel a, CalendarModel b);
+    public void execute(AppController app, Scanner in, StringBuilder out);
 }

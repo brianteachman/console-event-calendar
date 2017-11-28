@@ -1,43 +1,13 @@
-/*-----------------------------------------------------------------------------
-* Author: Brian Teachman
-* Date:   11/26/2017
-*
-* Application controller and calendar client
-*----------------------------------------------------------------------------*/
-
 import exceptions.InvalidDateInputException;
 import model.*;
 
 import java.io.File;
 import java.io.PrintStream;
-import java.util.HashMap;
 import java.util.Scanner;
 
-public class MainController {
+public class Main {
 
     private static String[][] events; // global events array
-
-    /*----------------------------------------------------------------------
-    * Available client actions
-    ----------------------------------------------------------------------*/
-
-    private static HashMap<String, CommandStrategy> buildWhitelist() {
-        HashMap<String, CommandStrategy> commands = new HashMap<String, CommandStrategy>();
-        // available actions
-        commands.put("e", new EnterDate());
-        commands.put("t", new TodaysDate());
-        commands.put("n", new NextMonth());
-        commands.put("p", new PreviousMonth());
-        commands.put("ev", new EventPlanning());
-        commands.put("fp", new PrintToFile());
-        commands.put("q", new SwitchState());
-        return commands;
-    }
-
-    private static void addCommandToWhitelist(HashMap<String, CommandStrategy> cmds,
-                                              String key, CommandStrategy cmd) {
-        cmds.put(key, cmd);
-    }
 
     /*----------------------------------------------------------------------
     * Calendar client
@@ -45,36 +15,37 @@ public class MainController {
 
     public static void main(String[] args) {
 
-        events = new String[12][31];
-        Events.loadEventFile(events,"src/calendarEvents.txt");
+        AppController app = new AppController();
+        /*------------------------------------------------------------------
+        * Initialize controller actions
+        ------------------------------------------------------------------*/
+        app.addCommand("e", new EnterDate());
+        app.addCommand("t", new TodaysDate());
+        app.addCommand("n", new NextMonth());
+        app.addCommand("p", new PreviousMonth());
+        app.addCommand("ev", new EventPlanning());
+        app.addCommand("fp", new PrintToFile());
+        app.addCommand("q", new SwitchState());
+        /*------------------------------------------------------------------
+        * Initialize events array
+        ------------------------------------------------------------------*/
+        events = app.initEvents();
 
-        // create editable "whitelist" of allow commands
-        HashMap<String, CommandStrategy> commands = buildWhitelist();
-
-        CalendarModel delta = new CalendarModel();
-        CalendarModel current = null;
-
-        Scanner prompt = new Scanner(System.in); // user prompt
-
+        /*------------------------------------------------------------------
+        * Build header output
+        ------------------------------------------------------------------*/
         StringBuilder header = new StringBuilder();
         addLine(header, "Welcome to my Doctor who themed calendar.");
         Theme.drawHeaderArt(header);
         stream(header.toString());
 
         while (SwitchState.isRunning()) {
+            String input = menu(new Scanner(System.in));
             StringBuilder output = new StringBuilder();
-            String arg = menu(prompt);
-
-            CommandStrategy cmd;
-            // using dictionary of commands to control flow
-            if (commands.containsKey(arg.toLowerCase())) {
-                cmd = commands.get(arg.toLowerCase());
-                cmd.execute(prompt, output, delta, current);
-            } else {
-                addLine(output, "Please enter a valid command.");
-            }
-
-            // pass output to StdOut
+            //
+            app.run(input, output);
+            //
+            Events.listAll(events, output);
             stream(output.toString());
         }
     }
@@ -130,36 +101,33 @@ public class MainController {
     }
 
     /*----------------------------------------------------------------------------
-     * Command Strategies
+     * Command Strategies (Controller Actions)
      *--------------------------------------------------------------------------*/
 
     private static class EnterDate implements CommandStrategy {
-        public void execute(Scanner in, StringBuilder out,
-                            CalendarModel delta, CalendarModel current) {
-            setDateFromPrompt(delta, in);
+        public void execute(AppController app, Scanner in, StringBuilder out) {
+            setDateFromPrompt(app.delta, in);
             Theme.drawBanner(out);
-            ViewModel.drawMonth(delta, out);
-            ViewModel.drawCurrentMonth(current, out);
+            ViewModel.drawMonth(app.delta, out);
+            ViewModel.drawCurrentMonth(app.current, out);
         }
     }
 
     private static class TodaysDate implements CommandStrategy {
-        public void execute(Scanner in, StringBuilder out,
-                            CalendarModel delta, CalendarModel current) {
+        public void execute(AppController app, Scanner in, StringBuilder out) {
             Theme.drawBanner(out);
-            ViewModel.drawCurrentMonth(current, out);
-            delta.setDateSetFlag(true);
+            ViewModel.drawCurrentMonth(app.current, out);
+            app.delta.setDateSetFlag(true);
         }
     }
 
     private static class NextMonth implements CommandStrategy {
-        public void execute(Scanner in, StringBuilder out,
-                            CalendarModel delta, CalendarModel current) {
-            if (delta.isDateSet()) {
-                delta.nextMonth();
+        public void execute(AppController app, Scanner in, StringBuilder out) {
+            if (app.delta.isDateSet()) {
+                app.delta.nextMonth();
                 Theme.drawBanner(out);
-                ViewModel.drawMonth(delta, out);
-                ViewModel.drawCurrentMonth(current, out);
+                ViewModel.drawMonth(app.delta, out);
+                ViewModel.drawCurrentMonth(app.current, out);
             } else {
                 addLine(out, "You need to have a calendar displayed first.");
             }
@@ -167,13 +135,12 @@ public class MainController {
     }
 
     private static class PreviousMonth implements CommandStrategy {
-        public void execute(Scanner in, StringBuilder out,
-                            CalendarModel delta, CalendarModel current) {
-            if (delta.isDateSet()) {
-                delta.previousMonth();
+        public void execute(AppController app, Scanner in, StringBuilder out) {
+            if (app.delta.isDateSet()) {
+                app.delta.previousMonth();
                 Theme.drawBanner(out);
-                ViewModel.drawMonth(delta, out);
-                ViewModel.drawCurrentMonth(current, out);
+                ViewModel.drawMonth(app.delta, out);
+                ViewModel.drawCurrentMonth(app.current, out);
             } else {
                 addLine(out, "You need to have a calendar displayed first.");
             }
@@ -181,8 +148,7 @@ public class MainController {
     }
 
     private static class EventPlanning implements CommandStrategy {
-        public void execute(Scanner in, StringBuilder out,
-                            CalendarModel delta, CalendarModel current) {
+        public void execute(AppController app, Scanner in, StringBuilder out) {
             // TASK 1
             // model.Event Planning: when "ev" is entered, start a new event planning action:
 
@@ -195,8 +161,8 @@ public class MainController {
                 Events.setEvent(events, ev);
             }
             catch (InvalidDateInputException e) {
-                stream(e.getMessage());
-                ev = promptForEvent(in);
+                stream(e.getMessage() + ViewModel.EOL);
+                app.getCommand("ev").execute(app, in, out);
             }
 
             // c. Display events from array in correct cell (day) of displayed calendar.
@@ -205,8 +171,7 @@ public class MainController {
     }
 
     private static class PrintToFile implements CommandStrategy {
-        public void execute(Scanner in, StringBuilder out,
-                            CalendarModel delta, CalendarModel current) {
+        public void execute(AppController app, Scanner in, StringBuilder out) {
             // TASK 3
             // File Printing: when "fp" is entered, write calendar of given date to a file.
 
@@ -221,12 +186,12 @@ public class MainController {
 
             // c. Write calendar and events to said file.
             StringBuilder s = new StringBuilder();
-            delta.setDate(month, 1, 2017);
+            app.delta.setDate(month, 1, 2017);
             try {
                 PrintStream file = new PrintStream(new File(filename));
                 //-- PRINT >>------------------------------------------
                 Theme.drawBanner(s);
-                ViewModel.drawMonth(delta, s);
+                ViewModel.drawMonth(app.delta, s);
                 file.println(s.toString());
                 //--<< END --------------------------------------------
 
@@ -246,8 +211,7 @@ public class MainController {
         public static boolean isRunning() {
             return running;
         }
-        public void execute(Scanner in, StringBuilder out,
-                            CalendarModel delta, CalendarModel current) {
+        public void execute(AppController app, Scanner in, StringBuilder out) {
             running = false;
             addLine(out, "That's one way to do it, good day.");
         }

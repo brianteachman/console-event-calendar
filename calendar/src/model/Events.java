@@ -2,6 +2,11 @@
  * Author: Brian Teachman
  * Date: 11/27/2017
  *
+ * Manages a 2-dimensional array, events[month][day], that represents
+ * calendar events.
+ *
+ * One event per day, per spec.
+ *
  * License: http://www.wtfpl.net/txt/copying/
  *-------------------------------------------------------------------*/
 package model;
@@ -15,6 +20,7 @@ import java.util.Scanner;
 public class Events {
 
     // TASK 1
+
     // model.Event Planning: when "ev" is entered, start a new event planning action:
     // a. Prompt user for an event in the form of "MM/DD event_title".
     // b. Parse and store event in global array, events[12][31].
@@ -22,9 +28,14 @@ public class Events {
         String[] part = event.split("\\s+"); // any whitespace
         int month = DateParser.monthFromDate(part[0]);
         int day = DateParser.dayFromDate(part[0]);
-        events[month-1][day-1] = part[1];
+//        events[month-1][day-1] = part[1];
+        events[month][day] = part[1];
     }
+
     // c. Display events from array in correct cell (day) of displayed calendar.
+    public static String getEvent(String[][] events, int month, int day) {
+        return parse(events[month][day]);
+    }
 
     // TASK 2
     // File Reading: if event file exists, load events into current calendar.
@@ -41,6 +52,20 @@ public class Events {
         }
         catch (FileNotFoundException e) {
             //
+        }
+    }
+
+    public static String parse(String str) {
+        return str.replaceAll("_", " ");
+    }
+
+    public static void listAll(String[][] events, StringBuilder output) {
+        for (String[] month : events) {
+            for (String day : month) {
+                if (day != null) {
+                    output.append(Events.parse(day)).append(ViewModel.EOL);
+                }
+            }
         }
     }
 }
