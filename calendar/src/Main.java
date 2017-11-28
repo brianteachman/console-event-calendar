@@ -32,20 +32,22 @@ public class Main {
         events = app.initEvents();
 
         /*------------------------------------------------------------------
-        * Build header output
+        * Add header to output
         ------------------------------------------------------------------*/
         StringBuilder header = new StringBuilder();
         addLine(header, "Welcome to my Doctor who themed calendar.");
         Theme.drawHeaderArt(header);
         stream(header.toString());
 
+        /*------------------------------------------------------------------
+        * Main application loop
+        ------------------------------------------------------------------*/
         while (SwitchState.isRunning()) {
-            String input = menu(new Scanner(System.in));
+            String action = menu(new Scanner(System.in));
             StringBuilder output = new StringBuilder();
             //
-            app.run(input, output);
+            app.run(action, output);
             //
-            Events.listAll(events, output);
             stream(output.toString());
         }
     }
@@ -117,6 +119,7 @@ public class Main {
         public void execute(AppController app, Scanner in, StringBuilder out) {
             Theme.drawBanner(out);
             ViewModel.drawCurrentMonth(app.current, out);
+//            Events.listAll(events, out);
             app.delta.setDateSetFlag(true);
         }
     }
