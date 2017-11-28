@@ -38,7 +38,7 @@ public class Events {
     }
 
     // TASK 2
-    // File Reading: if event file exists, load events into current calendar.
+    // File Reading: if event file exists, load events into thisMonth calendar.
     // a. If found, load a file named "calendarEvents.txt".
     // b. Add loaded events from file into the events array by date.
     // c. Events are processed in task 1.c.
@@ -65,6 +65,14 @@ public class Events {
                 if (day != null) {
                     output.append(Events.parse(day)).append(ViewModel.EOL);
                 }
+            }
+        }
+    }
+
+    public static void getEventsForMonth(String[][] events, int month, StringBuilder output) {
+        for (String day : events[month]) {
+            if (day != null) {
+                output.append(Events.parse(day)).append(ViewModel.EOL);
             }
         }
     }

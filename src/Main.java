@@ -108,29 +108,29 @@ public class Main {
 
     private static class EnterDate implements CommandStrategy {
         public void execute(AppController app, Scanner in, StringBuilder out) {
-            setDateFromPrompt(app.delta, in);
+            setDateFromPrompt(app.deltaMonth, in);
             Theme.drawBanner(out);
-            ViewModel.drawMonth(app.delta, out);
-            ViewModel.drawCurrentMonth(app.current, out);
+            ViewModel.drawMonth(app.deltaMonth, out);
+            ViewModel.drawCurrentMonth(app.thisMonth, out);
         }
     }
 
     private static class TodaysDate implements CommandStrategy {
         public void execute(AppController app, Scanner in, StringBuilder out) {
             Theme.drawBanner(out);
-            ViewModel.drawCurrentMonth(app.current, out);
-//            Events.listAll(events, out);
-            app.delta.setDateSetFlag(true);
+            ViewModel.drawCurrentMonth(app.thisMonth, out);
+//            Events.getEventsForMonth(events, app.thisMonth.getMonth(), out);
+            app.deltaMonth.setDateSetFlag(true);
         }
     }
 
     private static class NextMonth implements CommandStrategy {
         public void execute(AppController app, Scanner in, StringBuilder out) {
-            if (app.delta.isDateSet()) {
-                app.delta.nextMonth();
+            if (app.deltaMonth.isDateSet()) {
+                app.deltaMonth.nextMonth();
                 Theme.drawBanner(out);
-                ViewModel.drawMonth(app.delta, out);
-                ViewModel.drawCurrentMonth(app.current, out);
+                ViewModel.drawMonth(app.deltaMonth, out);
+                ViewModel.drawCurrentMonth(app.thisMonth, out);
             } else {
                 addLine(out, "You need to have a calendar displayed first.");
             }
@@ -139,11 +139,11 @@ public class Main {
 
     private static class PreviousMonth implements CommandStrategy {
         public void execute(AppController app, Scanner in, StringBuilder out) {
-            if (app.delta.isDateSet()) {
-                app.delta.previousMonth();
+            if (app.deltaMonth.isDateSet()) {
+                app.deltaMonth.previousMonth();
                 Theme.drawBanner(out);
-                ViewModel.drawMonth(app.delta, out);
-                ViewModel.drawCurrentMonth(app.current, out);
+                ViewModel.drawMonth(app.deltaMonth, out);
+                ViewModel.drawCurrentMonth(app.thisMonth, out);
             } else {
                 addLine(out, "You need to have a calendar displayed first.");
             }
@@ -161,7 +161,7 @@ public class Main {
                 ev = promptForEvent(in);
 
                 // b. Parse and store event in global array, events[12][31].
-                Events.setEvent(events, ev);
+                app.addEvent(events, ev);
             }
             catch (InvalidDateInputException e) {
                 stream(e.getMessage() + ViewModel.EOL);
@@ -189,12 +189,12 @@ public class Main {
 
             // c. Write calendar and events to said file.
             StringBuilder s = new StringBuilder();
-            app.delta.setDate(month, 1, 2017);
+            app.deltaMonth.setDate(month, 1, 2017);
             try {
                 PrintStream file = new PrintStream(new File(filename));
                 //-- PRINT >>------------------------------------------
                 Theme.drawBanner(s);
-                ViewModel.drawMonth(app.delta, s);
+                ViewModel.drawMonth(app.deltaMonth, s);
                 file.println(s.toString());
                 //--<< END --------------------------------------------
 

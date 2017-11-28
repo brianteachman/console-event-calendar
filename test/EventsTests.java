@@ -130,4 +130,8 @@ class EventsTests {
         assertEquals("Hello world", Events.getEvent(events, 6, 20));
     }
 
+    @Test
+    void testGetEventsForMonth() {
+
+    }
 }

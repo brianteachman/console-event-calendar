@@ -1,19 +1,25 @@
-# CS 140: Computer Programming Fundamentals I
+## TASK 1
+**model.Events Planning**: when "`ev`" is entered, start a new event planning action:
 
-My working dir for CS140 class at Whatcom Communtiy College, based on the book Building Java Programs - A Back to Basics Approach (2E).
+1. Prompt user for an event in the form of `"MM/DD event_title"`.
+2. Parse and store event in global array, `events[12][31]`.
+3. Display events from array in correct cell (day) of displayed calendar.
 
-This code is product of my efforts in CS140, Computer Programming Fundamentals I class in the Fall of 2017.
+## TASK 2
+**File Reading**: if event file exists, load events into current calendar.
 
-### Topics
+1. If found, load a file named "calendarEvents.txt".
+2. Add loaded events from file into the events array by date.
+3. Events are processed in task 1.c.
 
-1. Data types and representation
-2. Program control structures
-3. Functions
-4. File input/output
-5. Crafting and debugging code
+*Extra credit*: open a given filename and handle errors on fail.
 
-### Links
+## TASK 3
+**File Printing**: when "fp" is entered, write calendar of given date to a file.
 
-* [Java 8 API](http://docs.oracle.com/javase/8/docs/api/overview-summary.html)
-* [http://www.buildingjavaprograms.com/supplements4.shtml](http://www.buildingjavaprograms.com/supplements4.shtml)
-* [https://practiceit.cs.washington.edu/](https://practiceit.cs.washington.edu/)
+1. Prompt user for month to print.
+2. Prompt user for name of file to write.
+3. Write calendar and events to said file.
+4. Close pointer to file.
+
+*Extra credit*: support adding a commands to an allowed commands list and enforcing functionality.

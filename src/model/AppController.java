@@ -11,23 +11,21 @@ import java.util.Scanner;
 
 public class AppController {
 
+    public final CalendarModel thisMonth;
+    public CalendarModel deltaMonth;
+
     // Whitelist of controller actions
     private HashMap<String, CommandStrategy> commands;
 
-    public CalendarModel delta;
-    public CalendarModel current;
-
-    Scanner prompt; // user prompt
+//    private Scanner prompt; // user prompt
 
     public AppController() {
 
         commands = new HashMap<String, CommandStrategy>();
 
         // Working calendars
-        delta = new CalendarModel();
-        current = null;
-
-        prompt = new Scanner(System.in);
+        deltaMonth = new CalendarModel();
+        thisMonth = null;
     }
 
     /*----------------------------------------------------------------------
@@ -52,7 +50,7 @@ public class AppController {
         // using dictionary of commands to control flow
         if (commands.containsKey(action.toLowerCase())) {
             cmd = commands.get(action.toLowerCase());
-            cmd.execute(this, prompt, output);
+            cmd.execute(this, new Scanner(System.in), output);
         } else {
             output.append("\nPlease enter a valid command.\n");
         }
@@ -66,5 +64,9 @@ public class AppController {
         String[][] events = new String[13][32];
         Events.loadEventFile(events,"src/calendarEvents.txt");
         return events;
+    }
+
+    public void addEvent(String[][] events, String event) {
+        Events.setEvent(events, event);
     }
 }
