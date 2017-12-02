@@ -65,6 +65,12 @@ public class ViewModel {
                             k++; // account for double digit format
                         }
                     }
+//                    else if (Events.dayHasEvent(c, eventsFile, dayCount)) { //TODO: working on now
+                        // read calendar events file
+
+//                        Events.getEventsForMonth(c.getMonth());
+//                        s.append(); // end of cell
+//                    }
                     else if (k == (CELL_WIDTH - 1)) {
                         s.append("|"); // end of cell
                     } else {
@@ -102,8 +108,7 @@ public class ViewModel {
         int startWeekDay = c.getFirstWeekdayOfMonth();
         int daysInMonth = c.getLastDayOfMonth();
 
-        if ((rowNumber == 0 && cellNumber < (startWeekDay - 1))
-                || dayCount >= daysInMonth) {
+        if ((rowNumber == 0 && cellNumber < (startWeekDay - 1)) || dayCount >= daysInMonth) {
             s.append("  ");
         }
         else if (dayCount < daysInMonth) {

@@ -16,16 +16,16 @@ public class Delimiter {
         return instance;
     }
 
-    public static int getIndex(String formattedDate) {
+    public static int getIndex(String formattedDate, String delimiter) {
         if (delimiterIndex == null || !lastDateIn.equals(formattedDate)) { // only iterate through the string once
-            setIndex(formattedDate);
+            setIndex(formattedDate, delimiter);
             lastDateIn = formattedDate;
         }
         return delimiterIndex;
     }
 
-    public static void setIndex(String formattedDate) {
-        delimiterIndex = formattedDate.indexOf("/");
+    public static void setIndex(String formattedDate, String delimiter) {
+        delimiterIndex = formattedDate.indexOf(delimiter);
         if ( ! (delimiterIndex == 1 || delimiterIndex == 2)) { // accounts for '1' or '01' formatted case
             throw new IllegalArgumentException("Expected the format 'mm/dd', where mm is the month and dd is the day.");
         }

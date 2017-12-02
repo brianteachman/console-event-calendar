@@ -28,14 +28,15 @@ public class Events {
         if (part.length > 1) {
             int month = DateParser.monthFromDate(part[0]);
             int day = DateParser.dayFromDate(part[0]);
-//            events[month-1][day-1] = part[1];
-            events[month][day] = part[1];
+//            events[month][day] = part[1];
+            events[month][day] = DateParser.tidyDateString(month, day) + " " + part[1];
         }
     }
 
     // c. Display events from array in correct cell (day) of displayed calendar.
     public static String getEvent(String[][] events, int month, int day) {
-        return parse(events[month][day]);
+//        return parse(events[month][day]);
+        return parseEvent(events[month][day]);
     }
 
     // TASK 2
@@ -58,6 +59,11 @@ public class Events {
         return str.replaceAll("_", " ");
     }
 
+    public static String parseEvent(String str) {
+        return str.substring(str.indexOf(" ")+1, str.length())
+                  .replaceAll("_", " ");
+    }
+
     public static void listAll(String[][] events, StringBuilder output) {
         for (String[] month : events) {
             for (String day : month) {
@@ -66,6 +72,10 @@ public class Events {
                 }
             }
         }
+    }
+
+    public static boolean dayHasEvent(CalendarModel c, String[][] events, int dayOfMonth) {
+        return events[c.getMonth()][c.getDay()] != null;
     }
 
     public static void getEventsForMonth(String[][] events, int month, StringBuilder output) {

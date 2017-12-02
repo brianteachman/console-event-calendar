@@ -10,6 +10,7 @@ package model;
 
 import exceptions.InvalidDateInputException;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class DateParser {
@@ -20,15 +21,20 @@ public class DateParser {
         delim = Delimiter.getInstance();
     }
 
+    public static String tidyDateString(int month, int day) {
+        DecimalFormat fmtr = new DecimalFormat("00"); // lazy load :)
+        return String.format("%s/%s", fmtr.format(month), fmtr.format(day));
+    }
+
     // Given a date as a String, extract an integer value for the day and return it.
     public static int dayFromDate(String formatedDate) throws InvalidDateInputException {
-        String dd = formatedDate.substring(delim.getIndex(formatedDate)+1);
+        String dd = formatedDate.substring(delim.getIndex(formatedDate, "/")+1);
         return validateAndReturnInt(dd, 31, "Days");
     }
 
     // Given a date as a String, extract an integer value for the month and return it.
     public static int monthFromDate(String formatedDate) throws InvalidDateInputException {
-        String mm = formatedDate.substring(0, delim.getIndex(formatedDate));
+        String mm = formatedDate.substring(0, delim.getIndex(formatedDate, "/"));
         return validateAndReturnInt(mm, 12, "Months");
     }
 
