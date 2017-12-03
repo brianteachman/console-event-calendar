@@ -9,7 +9,7 @@
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import model.CalendarModel;
+import eventcalendar.CalendarModel;
 import org.junit.jupiter.api.Test;
 
 class CalendarModelTests {

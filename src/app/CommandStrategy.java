@@ -4,9 +4,7 @@
 *
 * Strategy pattern for processing console UI commands
 *----------------------------------------------------------------------------*/
-package model;
-
-import model.CalendarModel;
+package app;
 
 import java.util.Scanner;
 

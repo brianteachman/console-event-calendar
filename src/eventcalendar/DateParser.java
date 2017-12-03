@@ -6,7 +6,7 @@
 *
 * License: http://www.wtfpl.net/txt/copying/
 *----------------------------------------------------------------------------*/
-package model;
+package eventcalendar;
 
 import exceptions.InvalidDateInputException;
 

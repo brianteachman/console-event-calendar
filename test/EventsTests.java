@@ -3,7 +3,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import exceptions.InvalidDateInputException;
-import model.Events;
+import eventcalendar.Events;
 import org.junit.jupiter.api.*;
 
 class EventsTests {
@@ -28,7 +28,7 @@ class EventsTests {
     void testSetEventSetsValidDate() {
         events = new String[13][32];
         try {
-            Events.setEvent(events, "6/20 hello");
+            Events.setEvent(events, "1/20 hello");
         }
         catch (InvalidDateInputException e) {
             fail("Events.setEvent should not not have thrown InvalidDateInputException.");
@@ -36,7 +36,7 @@ class EventsTests {
         catch (ArrayIndexOutOfBoundsException e) {
             fail("Events.setEvent should not not have thrown ArrayIndexOutOfBoundsException.");
         }
-        assertEquals("hello", events[6][20]);
+        assertEquals("01/20 hello", events[1][20]);
     }
 
     @Test
@@ -83,7 +83,7 @@ class EventsTests {
         catch (ArrayIndexOutOfBoundsException e) {
             fail("Events.setEvent should not not have thrown ArrayIndexOutOfBoundsException.");
         }
-        assertEquals("Test_upper", events[12][31]);
+        assertEquals("12/31 Test_upper", events[12][31]);
     }
 
     @Test

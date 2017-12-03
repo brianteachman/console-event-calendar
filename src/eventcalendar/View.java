@@ -4,22 +4,27 @@
 *
 * View model, formats calendar for text layout.
 *----------------------------------------------------------------------------*/
-package model;
+package eventcalendar;
 
-public class ViewModel {
+import app.AppController;
+import app.Service;
 
-    private final static int CELL_WIDTH = 10;
+public class View extends Service {
+
     public final static String EOL = "\n";
-    private static int dayCount = 0; // for tracking days in printCalendarDay
+    private final int CELL_WIDTH = 10;
+
+    private int dayCount = 0; // for tracking days in printCalendarDay
+
+    AppController app;
+
+    public View(AppController app) {
+        this.app = app;
+    }
 
     /*----------------------------------------------------------------------------
      * Calendar Layout
      *--------------------------------------------------------------------------*/
-
-    public static void displayDate(StringBuilder s, int month, int day) {
-        s.append(EOL).append("Month: ").append(month)
-         .append(EOL).append("Day: ").append(day).append(EOL);
-    }
 
     public static void drawHeader(StringBuilder s, String glyph, int width) {
         for (int i = 0; i < width; i++) {
@@ -28,9 +33,14 @@ public class ViewModel {
         s.append(EOL);
     }
 
+    public void displayDate(StringBuilder s, int month, int day) {
+        s.append(EOL).append("Month: ").append(month)
+                .append(EOL).append("Day: ").append(day).append(EOL);
+    }
+
     // Accepts an integer representing the month and displays
     // the month as a text formatted calendar
-    public static void drawMonth(CalendarModel c, StringBuilder s) {
+    public void drawMonth(CalendarModel c, StringBuilder s) {
         s.append("\n").append(c.getMonthName()).append("\n");
         drawRowHeader(s, "=", CELL_WIDTH);
         for (int i = 0; i < 5; i++) { // 5 weeks
@@ -41,7 +51,7 @@ public class ViewModel {
         dayCount = 0;
     }
 
-    public static void drawCurrentMonth(CalendarModel c, StringBuilder s) {
+    public void drawCurrentMonth(CalendarModel c, StringBuilder s) {
         if (c == null) {
             c = new CalendarModel();
         }
@@ -49,7 +59,7 @@ public class ViewModel {
     }
 
     // Print one week of the calendar (one row) to the stream
-    private static void drawRow(CalendarModel c, StringBuilder s, int row) {
+    private void drawRow(CalendarModel c, StringBuilder s, int row) {
         for (int rowHeight = 0; rowHeight < cellHeight(); rowHeight++) { // cell height number of rows
             s.append("|"); // start row
             for (int cellNumber = 0; cellNumber < 7; cellNumber++) { // 7 cells for 7 days
@@ -65,12 +75,13 @@ public class ViewModel {
                             k++; // account for double digit format
                         }
                     }
-//                    else if (Events.dayHasEvent(c, eventsFile, dayCount)) { //TODO: working on now
-                        // read calendar events file
+                    else if (Events.dayHasEvent(c,
+                            ((CalendarController) app.get("Calendar")).getEvents(),
+                            dayCount)) {
 
 //                        Events.getEventsForMonth(c.getMonth());
-//                        s.append(); // end of cell
-//                    }
+                        s.append("<>"); // end of cell
+                    }
                     else if (k == (CELL_WIDTH - 1)) {
                         s.append("|"); // end of cell
                     } else {
@@ -83,7 +94,7 @@ public class ViewModel {
     }
 
     // Print a row divider, some given width
-    private static void drawRowHeader(StringBuilder s, String glyph, int width) {
+    private void drawRowHeader(StringBuilder s, String glyph, int width) {
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < width; j++) {
                 s.append(glyph);
@@ -94,7 +105,7 @@ public class ViewModel {
 
     // Let the row height be 1/2 * the row width, unless the cell's width
     // is less than or equal to 4, than it is 1.
-    private static int cellHeight() {
+    private int cellHeight() {
         int rowHieght = CELL_WIDTH/2;
         if (rowHieght < 1 || CELL_WIDTH == 4) {
             rowHieght = 1;
@@ -104,7 +115,7 @@ public class ViewModel {
     }
 
     // Print cell data to stream
-    private static void printCalendarDay(CalendarModel c, StringBuilder s, int rowNumber, int cellNumber) {
+    private void printCalendarDay(CalendarModel c, StringBuilder s, int rowNumber, int cellNumber) {
         int startWeekDay = c.getFirstWeekdayOfMonth();
         int daysInMonth = c.getLastDayOfMonth();
 

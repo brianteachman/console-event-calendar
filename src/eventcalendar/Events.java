@@ -9,8 +9,9 @@
  *
  * License: http://www.wtfpl.net/txt/copying/
  *-------------------------------------------------------------------*/
-package model;
+package eventcalendar;
 
+import exceptions.EventsFileNotFound;
 import exceptions.InvalidDateInputException;
 
 import java.io.File;
@@ -19,7 +20,6 @@ import java.util.Scanner;
 
 public class Events {
 
-    // TASK 1
     // model.Event Planning: when "ev" is entered, start a new event planning action:
     // a. Prompt user for an event in the form of "MM/DD event_title".
     // b. Parse and store event in global array, events[12][31].
@@ -28,31 +28,24 @@ public class Events {
         if (part.length > 1) {
             int month = DateParser.monthFromDate(part[0]);
             int day = DateParser.dayFromDate(part[0]);
-//            events[month][day] = part[1];
             events[month][day] = DateParser.tidyDateString(month, day) + " " + part[1];
         }
     }
 
-    // c. Display events from array in correct cell (day) of displayed calendar.
     public static String getEvent(String[][] events, int month, int day) {
 //        return parse(events[month][day]);
         return parseEvent(events[month][day]);
     }
 
-    // TASK 2
-    // File Reading: if event file exists, load events into thisMonth calendar.
-    // a. If found, load a file named "calendarEvents.txt".
-    // b. Add loaded events from file into the events array by date.
-    // c. Events are processed in task 1.c.
-    // Extra credit: open a given filename and handle errors on fail.
-    public static void loadEventFile(String[][] events, String filename) {
+    public static void loadEventFile(String[][] events, String filename) throws EventsFileNotFound {
         try {
             Scanner file = new Scanner(new File(filename));
             while (file.hasNextLine()) {
                 setEvent(events, file.nextLine());
             }
+        } catch (FileNotFoundException e) {
+            throw new EventsFileNotFound();
         }
-        catch (FileNotFoundException e) {}
     }
 
     public static String parse(String str) {
@@ -68,7 +61,7 @@ public class Events {
         for (String[] month : events) {
             for (String day : month) {
                 if (day != null) {
-                    output.append(Events.parse(day)).append(ViewModel.EOL);
+                    output.append(Events.parse(day)).append(View.EOL);
                 }
             }
         }
@@ -76,12 +69,13 @@ public class Events {
 
     public static boolean dayHasEvent(CalendarModel c, String[][] events, int dayOfMonth) {
         return events[c.getMonth()][c.getDay()] != null;
-    }
+//        return events[c.getMonth()][dayOfMonth] != null;
+}
 
     public static void getEventsForMonth(String[][] events, int month, StringBuilder output) {
         for (String day : events[month]) {
             if (day != null) {
-                output.append(Events.parse(day)).append(ViewModel.EOL);
+                output.append(Events.parse(day)).append(View.EOL);
             }
         }
     }

@@ -4,14 +4,14 @@
 *
 * Doctor Who Calendar Theme
 *----------------------------------------------------------------------------*/
-package model;
+package eventcalendar;
 
 import java.io.File;
 import java.util.Random;
 import java.util.Scanner;
 
 public class Theme {
-    private static final String PATH_FROM_ROOT = "src/";
+    private static final String PATH_FROM_ROOT = "data/";
 
     /*----------------------------------------------------------------------------
      * Creative requirement
@@ -22,7 +22,7 @@ public class Theme {
         try {
             in = new Scanner(new File(PATH_FROM_ROOT + "header_graphic.txt"));
             while(in.hasNextLine()) {
-                s.append(in.nextLine()).append(ViewModel.EOL);
+                s.append(in.nextLine()).append(View.EOL);
             }
         }
         catch (Exception e) { /* keep quiet */ }
@@ -30,10 +30,10 @@ public class Theme {
 
     public static void drawBanner(StringBuilder s) {
         String content = getDrQuote();
-        s.append(ViewModel.EOL);
-        ViewModel.drawHeader(s, "-", content.length());
-        s.append(content).append(ViewModel.EOL);
-        ViewModel.drawHeader(s, "-", content.length());
+        s.append(View.EOL);
+        View.drawHeader(s, "-", content.length());
+        s.append(content).append(View.EOL);
+        View.drawHeader(s, "-", content.length());
     }
 
     private static String getDrQuote() {

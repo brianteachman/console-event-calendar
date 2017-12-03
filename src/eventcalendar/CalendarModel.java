@@ -4,7 +4,7 @@
 *
 * java.util.Calendar Wrapper
 *----------------------------------------------------------------------------*/
-package model;
+package eventcalendar;
 
 import java.util.Calendar;
 import java.util.TimeZone;
