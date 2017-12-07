@@ -6,6 +6,8 @@
  *-------------------------------------------------------------------*/
 package app;
 
+import exceptions.ServiceCollisionException;
+
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -54,7 +56,7 @@ public class AppController {
     * Controller services setter/getter
     ----------------------------------------------------------------------*/
 
-    public void addService(String key, Service service) {
+    public void addService(String key, Service service) throws ServiceCollisionException {
         deps.add(key, service);
     }
 
@@ -63,5 +65,9 @@ public class AppController {
             return deps.get(key);
         }
         return null;
+    }
+
+    public ServiceManager getServiceManager() {
+        return deps;
     }
 }

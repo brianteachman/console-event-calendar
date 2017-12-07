@@ -8,7 +8,7 @@
  *-------------------------------------------------------------------*/
 package app;
 
-import eventcalendar.CalendarController;
+import exceptions.ServiceCollisionException;
 
 import java.util.HashMap;
 
@@ -26,8 +26,12 @@ public class ServiceManager {
         return services.containsKey(key);
     }
 
-    public void add(String key, Service service) {
-        services.put(key, service);
+    public void add(String key, Service service) throws ServiceCollisionException {
+        if (!has(key)) {
+            services.put(key, service);
+        } else {
+            throw new ServiceCollisionException(key);
+        }
     }
 
     public Service get(String key) {

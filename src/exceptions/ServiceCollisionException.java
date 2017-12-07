@@ -1,11 +1,14 @@
 /*---------------------------------------------------------------------
  * Author: Brian Teachman
- * Date: 12/2/2017
+ * Date: 12/3/2017
  * 
- * Naive dependency injection container (IoC)
- *
  * License: http://www.wtfpl.net/txt/copying/
  *-------------------------------------------------------------------*/
-package app;
+package exceptions;
 
-public interface Service { }
+public class ServiceCollisionException extends IllegalArgumentException {
+
+    public ServiceCollisionException(String key) {
+        super(key + " service already loaded");
+    }
+}

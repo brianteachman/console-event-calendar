@@ -67,20 +67,20 @@ class CalendarModelTests {
     @Test
     void testGetDayMonthStartsOn() {
         CalendarModel cm = new CalendarModel(11, 25);
-        assertEquals(4, cm.getFirstWeekdayOfMonth());
+        assertEquals(4, cm.getRowPositionOfMonthStart());
     }
 
     @Test
     void testGetDayMonthStartsOnDoesntChangeCalendarDay() {
         CalendarModel cm = new CalendarModel(11, 25);
-        cm.getFirstWeekdayOfMonth();
+        cm.getRowPositionOfMonthStart();
         assertEquals(25, cm.getDay());
     }
 
     @Test
     void testCanGetWeekdayOfBeginningOfMonth() {
         CalendarModel cm = new CalendarModel(11, 25);
-        assertEquals(4, cm.getFirstWeekdayOfMonth());
+        assertEquals(4, cm.getRowPositionOfMonthStart());
     }
 
 }

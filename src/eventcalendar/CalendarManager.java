@@ -1,34 +1,29 @@
-package eventcalendar;/*---------------------------------------------------------------------
+/*---------------------------------------------------------------------
  * Author: Brian Teachman
  * Date: 12/2/2017
  * 
  * License: http://www.wtfpl.net/txt/copying/
  *-------------------------------------------------------------------*/
+package eventcalendar;
 
 import app.Service;
+import app.ServiceManager;
 import exceptions.EventsFileNotFound;
 import exceptions.InvalidDateInputException;
 
-import java.io.FileNotFoundException;
-
-public class CalendarController extends Service {
+public class CalendarManager implements Service {
 
     public final CalendarModel thisMonth;
     public CalendarModel deltaMonth;
     private boolean isThisMonth;
 
-    // reference to events array
-    private String[][] events;
+    ServiceManager deps;
 
-    public CalendarController(String[][] events/*, PrintStream logger*/) {
-        super();
+    public CalendarManager(ServiceManager dependencies) {
         deltaMonth = new CalendarModel();
         thisMonth = new CalendarModel();
         isThisMonth = true; // used for calendar output
-
-//        events = new String[13][32];
-        this.events = events;
-//        logger.println("model.CalendarController");
+        this.deps = dependencies;
     }
 
     /*----------------------------------------------------------------------
@@ -54,6 +49,10 @@ public class CalendarController extends Service {
         deltaMonth.setDateSetFlag(isDateSet);
     }
 
+    public void nextDay() {
+        deltaMonth.nextDay();
+    }
+
     public void nextMonth() {
         deltaMonth.nextMonth();
     }
@@ -70,34 +69,4 @@ public class CalendarController extends Service {
         return thisMonth.getMonthNames();
     }
 
-    /*----------------------------------------------------------------------
-    * Manage events
-    ----------------------------------------------------------------------*/
-
-    public void loadEvents(String[][] events, String filename) throws EventsFileNotFound {
-        Events.loadEventFile(events, "data/" + filename);
-    }
-
-    public void loadEvents(String[][] events) {
-        try {
-            Events.loadEventFile(events,"data/calendarEvents.txt");
-        }
-        catch (EventsFileNotFound e) {}
-    }
-
-    public void addEvent(String[][] events, String event) {
-        Events.setEvent(events, event);
-    }
-
-    public String[][] getEvents() {
-        return events;
-    }
-
-    public int[] getDateFromEventString(String event) {
-        int[] date = new int[2];
-        String[] part = event.split("\\s+");
-        date[0] = DateParser.monthFromDate(part[0]);
-        date[1] = DateParser.dayFromDate(part[0]);
-        return date;
-    }
 }

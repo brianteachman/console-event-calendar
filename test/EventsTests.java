@@ -3,7 +3,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import exceptions.InvalidDateInputException;
-import eventcalendar.Events;
+import eventcalendar.EventManager;
 import org.junit.jupiter.api.*;
 
 class EventsTests {
@@ -27,8 +27,9 @@ class EventsTests {
     @Test
     void testSetEventSetsValidDate() {
         events = new String[13][32];
+        EventManager evm = new EventManager();
         try {
-            Events.setEvent(events, "1/20 hello");
+            evm.addEvent(events, "1/20 hello");
         }
         catch (InvalidDateInputException e) {
             fail("Events.setEvent should not not have thrown InvalidDateInputException.");
@@ -42,9 +43,10 @@ class EventsTests {
     @Test
     void testSetEventDayUpperBoundCollision() {
         events = new String[13][32];
+        EventManager evm = new EventManager();
         boolean exceptionThrown = false;
         try {
-            Events.setEvent(events, "12/32 hello");
+            evm.addEvent(events, "12/32 hello");
         }
         catch (InvalidDateInputException e) {
             exceptionThrown = true;
@@ -58,9 +60,10 @@ class EventsTests {
     @Test
     void testSetEventDayLowerBoundCollision() {
         events = new String[13][32];
+        EventManager evm = new EventManager();
         boolean exceptionThrown = false;
         try {
-            Events.setEvent(events, "1/0 hello");
+            evm.addEvent(events, "1/0 hello");
         }
         catch (InvalidDateInputException e) {
             exceptionThrown = true;
@@ -74,8 +77,9 @@ class EventsTests {
     @Test
     void testSetEventUpperBoundary() {
         events = new String[13][32];
+        EventManager evm = new EventManager();
         try {
-            Events.setEvent(events, "12/31 Test_upper");
+            evm.addEvent(events, "12/31 Test_upper");
         }
         catch (InvalidDateInputException e) {
             fail("Events.setEvent should not not have thrown InvalidDateInputException.");
@@ -89,9 +93,10 @@ class EventsTests {
     @Test
     void testSetEventMonthUpperBoundCollision() {
         events = new String[13][32];
+        EventManager evm = new EventManager();
         boolean exceptionThrown = false;
         try {
-            Events.setEvent(events, "13/31 hello");
+            evm.addEvent(events, "13/31 hello");
         }
         catch (InvalidDateInputException e) {
             exceptionThrown = true;
@@ -105,9 +110,10 @@ class EventsTests {
     @Test
     void testSetEventMonthLowerBoundCollision() {
         events = new String[13][32];
+        EventManager evm = new EventManager();
         boolean exceptionThrown = false;
         try {
-            Events.setEvent(events, "1/0 hello");
+            evm.addEvent(events, "1/0 hello");
         }
         catch (InvalidDateInputException e) {
             exceptionThrown = true;
@@ -125,13 +131,23 @@ class EventsTests {
     @Test
     void testGetEvent() {
         events = new String[13][32];
-        Events.setEvent(events, "6/20 Hello_world");
+        EventManager evm = new EventManager();
+        evm.addEvent(events, "6/20 Hello_world");
 
-        assertEquals("Hello world", Events.getEvent(events, 6, 20));
+        assertEquals("Hello world", evm.getEvent(events, 6, 20));
     }
 
     @Test
     void testGetEventsForMonth() {
 
+    }
+
+    @Test
+    void testDayHasEvent() {
+        events = new String[12][31];
+        EventManager evm = new EventManager();
+        evm.addEvent(events, "6/20 Hello_world");
+
+        assertTrue(evm.dayHasEvent(events,6, 20));
     }
 }

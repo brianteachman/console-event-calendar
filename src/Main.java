@@ -5,7 +5,6 @@ import exceptions.InvalidDateInputException;
 import eventcalendar.*;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.Scanner;
 
@@ -35,16 +34,17 @@ public class Main {
         /*------------------------------------------------------------------
         * Initialize controller dependencies
         ------------------------------------------------------------------*/
-        app.addService("Calendar", new CalendarController(events));
-        app.addService("View", new View(app));
+        app.addService("Events", new EventManager());
+        app.addService("Calendar", new CalendarManager(app.getServiceManager()));
+        app.addService("View", new View(app.getServiceManager()));
 
         /*------------------------------------------------------------------
         * Initialize events array
         ------------------------------------------------------------------*/
         events = new String[13][32];
-        ((CalendarController) app.get("Calendar")).loadEvents(events);
-
+        ((EventManager) app.get("Events")).loadEvents(events);
 //        CalendarController cal = (CalendarController) app.get("Calendar");
+        // TODO: How do I fix this: ^^^^^^^^^^^^^^^^^^ ugly casting issue
 //        cal.loadEvents(events);
 
         // feel free to pragmatically add events
@@ -121,7 +121,7 @@ public class Main {
 
     private static class EnterDate implements CommandStrategy {
         public void execute(AppController app, Scanner in, StringBuilder out) {
-            CalendarController cal = (CalendarController) app.get("Calendar");
+            CalendarManager cal = (CalendarManager) app.get("Calendar");
             String formattedDate = promptForDate(in); // in-line processing
             try {
                 int month = DateParser.monthFromDate(formattedDate);
@@ -138,19 +138,20 @@ public class Main {
 
     private static class TodaysDate implements CommandStrategy {
         public void execute(AppController app, Scanner in, StringBuilder out) {
-            CalendarController cal = (CalendarController) app.get("Calendar");
+            CalendarManager cal = (CalendarManager) app.get("Calendar");
             View view = (View) app.get("View");
             Theme.drawBanner(out);
-            view.drawCurrentMonth(cal.thisMonth, out);
+            view.drawCurrentMonth(cal.thisMonth, events, out);
+            cal.setDateSetFlag(true);
+            //
             addLine(out, "Events for " + cal.thisMonth.getMonthName() + ": ");
             addHeaderedListOfEventsForMonth(app, cal.thisMonth.getMonth(), out);
-            cal.setDateSetFlag(true);
         }
     }
 
     private static class NextMonth implements CommandStrategy {
         public void execute(AppController app, Scanner in, StringBuilder out) {
-            CalendarController cal = (CalendarController) app.get("Calendar");
+            CalendarManager cal = (CalendarManager) app.get("Calendar");
             if (cal.isDateSet()) {
                 cal.nextMonth();
                 drawCalendars(app, out);
@@ -162,7 +163,7 @@ public class Main {
 
     private static class PreviousMonth implements CommandStrategy {
         public void execute(AppController app, Scanner in, StringBuilder out) {
-            CalendarController cal = (CalendarController) app.get("Calendar");
+            CalendarManager cal = (CalendarManager) app.get("Calendar");
             if (cal.isDateSet()) {
                 cal.previousMonth();
                 drawCalendars(app, out);
@@ -172,22 +173,21 @@ public class Main {
         }
     }
 
+    // when "ev" is entered, start a new event planning action:
     private static class AddEvent implements CommandStrategy {
         public void execute(AppController app, Scanner in, StringBuilder out) {
-            CalendarController cal = (CalendarController) app.get("Calendar");
-            // TASK 1 - Event Planning:
-            // when "ev" is entered, start a new event planning action:
+            EventManager evm = (EventManager) app.get("Events");
 
-            // a. Prompt user for an event in the form of "MM/DD event_title".
             String ev = null;
             try {
+                // prompt user for an event in the form of "MM/DD event_title".
                 ev = promptForEvent(in);
 
-                // b. Parse and store event in global array, events[12][31].
-                cal.addEvent(events, ev);
-                int month = cal.getDateFromEventString(ev)[0];
+                // parse and store event in global array, events[12][31].
+                evm.addEvent(events, ev);
+                int month = evm.getDateFromEventString(ev)[0];
 
-                // c. Display events from array in correct cell (day) of displayed calendar.
+                // display events from array in correct cell (day) of displayed calendar.
                 addLine(out, "Added the following event to " + month + "'s calendar:\n" + ev);
             }
             catch (InvalidDateInputException e) {
@@ -199,7 +199,7 @@ public class Main {
 
     private static class ListEvents implements CommandStrategy {
         public void execute(AppController app, Scanner in, StringBuilder out) {
-            CalendarController cal = (CalendarController) app.get("Calendar");
+            CalendarManager cal = (CalendarManager) app.get("Calendar");
             String[] months = cal.getMonthNames();
             addLine(out, "Event Listing for current year:");
             for (int i = 0; i < 12; i++) {
@@ -211,10 +211,10 @@ public class Main {
 
     private static class ImportEvents implements CommandStrategy {
         public void execute(AppController app, Scanner in, StringBuilder out) {
-            CalendarController cal = (CalendarController) app.get("Calendar");
+            EventManager evm = (EventManager) app.get("Events");
             try { // load events
                 String filename = promptForEventFileName(in);
-                cal.loadEvents(events, filename);
+                evm.loadEvents(events, filename);
                 addLine(out, "Loaded event file " + filename + ".");
             }
             catch (EventsFileNotFound e) {
@@ -224,13 +224,11 @@ public class Main {
         }
     }
 
+    // when "fp" is entered, write calendar of given date to a file.
     private static class PrintToFile implements CommandStrategy {
         public void execute(AppController app, Scanner in, StringBuilder out) {
-            CalendarController cal = (CalendarController) app.get("Calendar");
+            CalendarManager cal = (CalendarManager) app.get("Calendar");
             View view = (View) app.get("View");
-
-            // TASK 3
-            // File Printing: when "fp" is entered, write calendar of given date to a file.
 
             int month = -1;
             String filename = null;
@@ -258,7 +256,7 @@ public class Main {
                 PrintStream file = new PrintStream(new File(filename));
                 //-- PRINT >>------------------------------------------
                 Theme.drawBanner(s);
-                view.drawMonth(cal.deltaMonth, s);
+                view.drawMonth(cal.deltaMonth, events, s);
                 addLine(s, "Events for " + cal.getMonthName() + ": ");
                 addHeaderedListOfEventsForMonth(app, cal.deltaMonth.getMonth(), s); //TODO: demeters law violation
                 file.println(s.toString());
@@ -301,24 +299,22 @@ public class Main {
     }
 
     private static void addHeaderedListOfEventsForMonth(AppController app, int month, StringBuilder out) {
-        View view = (View) app.get("View");
-        // add events for the month
-        view.drawHeader(out, "-", 70);
-        Events.getEventsForMonth(events, month, out);
+        ((View) app.get("View")).drawHeader(out, "-", 70);
+        ((EventManager) app.get("Events")).listEventsForMonth(events, month, out);
     }
 
     private static void drawCalendars(AppController app, StringBuilder out) {
-        CalendarController cal = (CalendarController) app.get("Calendar");
+        CalendarManager cal = (CalendarManager) app.get("Calendar");
         View view = (View) app.get("View");
 
         Theme.drawBanner(out);
 
-        view.drawMonth(cal.deltaMonth, out);
-//        addLine(out, "Events for " + cal.getMonthName() + ": ");
-//        addHeaderedListOfEventsForMonth(app, cal.getMonth(), out);
+        view.drawMonth(cal.deltaMonth, events, out);
+        addLine(out, "Events for " + cal.getMonthName() + ": ");
+        addHeaderedListOfEventsForMonth(app, cal.deltaMonth.getMonth(), out);
 
-        view.drawCurrentMonth(cal.thisMonth, out);
-//        addLine(out, "Events for " + cal.getMonthName() + ": ");
-//        addHeaderedListOfEventsForMonth(app, cal.thisMonth, out);
+        view.drawCurrentMonth(cal.thisMonth, events, out);
+        addLine(out, "Events for " + cal.getMonthName() + ": ");
+        addHeaderedListOfEventsForMonth(app, cal.thisMonth.getMonth(), out);
     }
 }

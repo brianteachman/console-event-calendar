@@ -73,7 +73,7 @@ public class CalendarModel {
     }
 
     // Returns weekday of start of the month (1..7), Sunday through Saturday
-    public int getFirstWeekdayOfMonth() {
+    public int getRowPositionOfMonthStart() {
         Calendar copy = (Calendar) this.cal.clone();
         copy.set(Calendar.DAY_OF_MONTH, 1);
         return copy.get(Calendar.DAY_OF_WEEK);
@@ -109,6 +109,11 @@ public class CalendarModel {
 
     public void setDateSetFlag(boolean flag) {
         dateIsSet = flag;
+    }
+
+    public void nextDay() {
+        this.cal.set(this.cal.get(Calendar.YEAR), this.cal.get(Calendar.MONTH),
+                this.cal.get(Calendar.DAY_OF_MONTH) + 1);
     }
 
     public void nextMonth() {
