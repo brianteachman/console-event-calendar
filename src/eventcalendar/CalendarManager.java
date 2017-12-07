@@ -36,6 +36,11 @@ public class CalendarManager implements Service {
         isThisMonth = false;
     }
 
+    public int getMonth() {
+        if (isThisMonth) return thisMonth.getMonth();
+        return deltaMonth.getMonth();
+    }
+
     public String getMonthName() {
         if (isThisMonth) return thisMonth.getMonthName();
         return deltaMonth.getMonthName();

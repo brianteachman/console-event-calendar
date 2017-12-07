@@ -309,12 +309,14 @@ public class Main {
 
         Theme.drawBanner(out);
 
+        cal.setThisMonth(false);
         view.drawMonth(cal.deltaMonth, events, out);
         addLine(out, "Events for " + cal.getMonthName() + ": ");
-        addHeaderedListOfEventsForMonth(app, cal.deltaMonth.getMonth(), out);
+        addHeaderedListOfEventsForMonth(app, cal.getMonth(), out);
 
+        cal.setThisMonth(true);
         view.drawCurrentMonth(cal.thisMonth, events, out);
         addLine(out, "Events for " + cal.getMonthName() + ": ");
-        addHeaderedListOfEventsForMonth(app, cal.thisMonth.getMonth(), out);
+        addHeaderedListOfEventsForMonth(app, cal.getMonth(), out);
     }
 }
