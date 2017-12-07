@@ -227,7 +227,6 @@ public class Main {
     // when "fp" is entered, write calendar of given date to a file.
     private static class PrintToFile implements CommandStrategy {
         public void execute(AppController app, Scanner in, StringBuilder out) {
-            CalendarManager cal = (CalendarManager) app.get("Calendar");
             View view = (View) app.get("View");
 
             int month = -1;
@@ -249,26 +248,25 @@ public class Main {
                 return;
             }
 
-            // c. Write calendar and events to said file.
-            StringBuilder s = new StringBuilder();
+            // write calendar and events to said file.
+            StringBuilder s = new StringBuilder(); // TODO: add factories for StringBuilder, CalendarModel, and PrintStream in the ServiceManager
+            CalendarModel cal = new CalendarModel();
             cal.setDate(month, 1, 2017);
             try {
-                PrintStream file = new PrintStream(new File(filename));
+                PrintStream file = new PrintStream(new File("data/"+filename));
                 //-- PRINT >>------------------------------------------
                 Theme.drawBanner(s);
-                view.drawMonth(cal.deltaMonth, events, s);
+                view.drawMonth(cal, events, s);
                 addLine(s, "Events for " + cal.getMonthName() + ": ");
-                addHeaderedListOfEventsForMonth(app, cal.deltaMonth.getMonth(), s); //TODO: demeters law violation
+                addHeaderedListOfEventsForMonth(app, cal.getMonth(), s);
                 file.println(s.toString());
                 //--<< END --------------------------------------------
-
-                // d. Close pointer to file.
-                file.close();
+                file.close(); // close pointer to file
             }
             catch (Exception e) { /*stream("Shitty: "+e.getMessage());*/ }
 
             addLine(out, "Calendar and events for " + cal.getMonthName()
-                    + " was printed to "+filename);
+                    + " was printed to data/"+filename+" in this calendar's data folder.");
         }
     }
 

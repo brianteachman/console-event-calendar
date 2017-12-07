@@ -46,7 +46,7 @@ public class Theme {
             "\"Yes. Still, the future lies this way.\" - The Fifth Doctor",
             "\"What's the use of a good quotation if you can't change it?\" - The Sixth Doctor",
             "\"All is change, all is movement\" - The Seventh Doctor",
-            "\"I love humans. Always seeing patterns in things that aren’t there.\" - The Eigth Doctor",
+            "\"I love humans. Always seeing patterns in things that aren’t there.\" - The Eighth Doctor",
             "\"I love a happy medium!\" - The Ninth Doctor",
             "\"Allons-y!\" - The Tenth Doctor",
             "\"I have a thing. It's like a plan, but with more greatness.\" - The Eleventh Doctor",
