@@ -91,7 +91,7 @@ public class View implements Service {
                             colPos++;   // account for double digit format
                         }
                     } else if (colPos == 1 && rowPos == 2) {
-
+                        //
                         printDailyEvents(c, e, s, row, col);
                         colPos += 4;
 
@@ -104,9 +104,6 @@ public class View implements Service {
                     if (dayCount == c.getLastDayOfMonth()
                             && isCellComplete(c, rowPos, colPos) && !isDonePrinting) {
                         isDonePrinting = true;
-//                        System.out.println("> Day "+dayCount + ": " + isDonePrinting
-//                                            + "\n  x="+colPos+", y="+rowPos
-//                                            + "\n  col="+col+", row="+row);
                     }
                 }
             }
@@ -178,47 +175,5 @@ public class View implements Service {
             // when CELL_WIDTH < 4, right cell edge collapses
         }
         return rowHieght;
-    }
-
-    /*----------------------------------------------------------------------------
-     * Test Client
-     *--------------------------------------------------------------------------*/
-
-    public static void main(String[] args) {
-        ServiceManager sm = new ServiceManager();
-        View v = new View(sm);
-//        CalendarManager c = new CalendarManager(sm);
-//        sm.add("Calendar", c);
-//        sm.add("Events", new EventManager());
-//        sm.add("View", v);
-//
-//        StringBuilder s = new StringBuilder();
-//        String[][] events = new String[12][31];
-//
-//        v.drawMonth(c.deltaMonth, events, s);
-////        System.out.println(s);
-//
-////        s.delete(0, s.length()); // reset string
-//        c.deltaMonth.nextMonth();
-//        v.drawMonth(c.deltaMonth, events, s);
-//        System.out.println(s);
-
-        // simulate long month
-        CalendarModel c = new CalendarModel();
-//        c.setDate(12, 1, 2017);
-        c.setDate(11, 1, 2017);
-        int day = 0;
-        for (int row = 0; row < 6; row++) {     // Six weeks max
-            for (int col = 0; col < 7; col++) { // Seven days
-                if ((row == 0 && col >= c.getRowPositionOfMonthStart()-1) || row > 0) {
-//                    c.nextDay();
-                    ++day;
-                }
-//                if (row > 3 && c.getDay() < 6) v.isDonePrinting = true;
-                if (row > 3 && day < 6) v.isDonePrinting = true;
-//                System.out.println(c.getDay() + ": " + v.cellIsInMonth(c, row, col));
-                System.out.println(day + ": " + v.cellIsInMonth(c, row, col, day));
-            }
-        }
     }
 }

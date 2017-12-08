@@ -41,7 +41,7 @@ public class Main {
         /*------------------------------------------------------------------
         * Initialize events array
         ------------------------------------------------------------------*/
-        events = new String[13][32];
+        events = new String[13][32]; // weird specification requirement
         ((EventManager) app.get("Events")).loadEvents(events);
 //        CalendarController cal = (CalendarController) app.get("Calendar");
         // TODO: How do I fix this: ^^^^^^^^^^^^^^^^^^ ugly casting issue
@@ -248,8 +248,9 @@ public class Main {
                 return;
             }
 
+            // TODO: add factories for StringBuilder, CalendarModel, and PrintStream in ServiceManager
             // write calendar and events to said file.
-            StringBuilder s = new StringBuilder(); // TODO: add factories for StringBuilder, CalendarModel, and PrintStream in the ServiceManager
+            StringBuilder s = new StringBuilder();
             CalendarModel cal = new CalendarModel();
             cal.setDate(month, 1, 2017);
             try {
